@@ -206,8 +206,8 @@ export default function AdminDashboardPage() {
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-[6px] bg-[#0F172A]">
               <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 10 L10 50 L40 50 L40 30 L60 30 L60 50 L40 70 L10 70 L10 90 L50 90 L90 50 L90 10 Z" fill="#F1F1F8"/>
-                <path d="M90 90 L90 50 L60 50 L60 70 L40 70 L40 50 L60 30 L90 30 L90 10 L50 10 L10 50 L10 90 Z" fill="#F1F1F8" opacity="0.45"/>
+                <path d="M28 6 L94 6 L94 72 L72 72 L72 50 L50 50 L50 28 L28 28 Z" fill="white"/>
+                <path d="M72 94 L6 94 L6 28 L28 28 L28 50 L50 50 L50 72 L72 72 Z" fill="white"/>
               </svg>
             </div>
             <div>
@@ -276,8 +276,8 @@ export default function AdminDashboardPage() {
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-[4px] bg-[#0F172A]">
               <svg width="18" height="18" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 10 L10 50 L40 50 L40 30 L60 30 L60 50 L40 70 L10 70 L10 90 L50 90 L90 50 L90 10 Z" fill="#F1F1F8"/>
-                <path d="M90 90 L90 50 L60 50 L60 70 L40 70 L40 50 L60 30 L90 30 L90 10 L50 10 L10 50 L10 90 Z" fill="#F1F1F8" opacity="0.45"/>
+                <path d="M28 6 L94 6 L94 72 L72 72 L72 50 L50 50 L50 28 L28 28 Z" fill="white"/>
+                <path d="M72 94 L6 94 L6 28 L28 28 L28 50 L50 50 L50 72 L72 72 Z" fill="white"/>
               </svg>
             </div>
             <span className={`text-sm font-bold ${textPrimary}`}>SAMMA Factory</span>
