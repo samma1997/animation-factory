@@ -51,14 +51,9 @@ const GITHUB_REPO = 'samma1997/animation-factory'
 const GITHUB_BANK_PATH = 'public/images/bank'
 
 const IMAGE_CATEGORIES = [
-  { id: 'speakers', name: 'Speaker', icon: '🎤', desc: 'Foto speaker e coach (es. speaker, coach, relatori)', naming: 'speaker-nome-cognome-WxH.jpg' },
-  { id: 'events', name: 'Eventi', icon: '🎪', desc: 'Foto eventi, palchi, sale, platee', naming: 'event-nome-evento-WxH.jpg' },
-  { id: 'immobiliare', name: 'Immobiliare', icon: '🏠', desc: 'Foto immobili, cantieri, ristrutturazioni, rendering', naming: 'immobiliare-descrizione-WxH.jpg' },
-  { id: 'trading', name: 'Trading', icon: '📈', desc: 'Schermate trading, grafici, piattaforme', naming: 'trading-descrizione-WxH.jpg' },
-  { id: 'backgrounds', name: 'Sfondi', icon: '🖼️', desc: 'Immagini di sfondo per hero sections', naming: 'bg-descrizione-WxH.jpg' },
-  { id: 'logos', name: 'Loghi', icon: '✦', desc: 'Loghi SAMMA, partner, media (Rai, Corriere...)', naming: 'logo-nome-WxH.png' },
-  { id: 'testimonials', name: 'Testimonianze', icon: '💬', desc: 'Foto studenti, screenshot risultati', naming: 'testimonial-nome-WxH.jpg' },
-  { id: 'icons', name: 'Icone', icon: '◆', desc: 'Icone e illustrazioni personalizzate', naming: 'icon-descrizione-WxH.svg' },
+  { id: 'portfolio', name: 'Portfolio', icon: '🖥️', desc: 'Screenshot, video e demo dei tuoi progetti', naming: 'portfolio-nome-progetto-WxH.jpg' },
+  { id: 'brand', name: 'Brand Assets', icon: '✦', desc: 'Loghi, icone, assets del tuo brand', naming: 'brand-descrizione-WxH.png' },
+  { id: 'backgrounds', name: 'Sfondi', icon: '🖼️', desc: 'Background per hero, sezioni, pattern', naming: 'bg-descrizione-WxH.jpg' },
 ]
 
 // ────────────────────────────────────────────────────────
@@ -235,6 +230,7 @@ export default function AdminDashboardPage() {
             Design System
           </p>
           <NavItem icon={Layers} label="Blocchi" badge={String(BLOCK_CATALOG.length)} active={activeTab === 'blocchi'} dark={dark} onClick={() => { setActiveTab('blocchi'); setSidebarOpen(false) }} />
+          <NavItem icon={Sparkles} label="Animazioni" badge={String(ANIMATIONS.length)} active={activeTab === 'animazioni'} dark={dark} onClick={() => { setActiveTab('animazioni'); setSidebarOpen(false) }} />
 
           <p className={`mb-2 mt-5 px-3 text-[10px] font-bold uppercase tracking-[0.15em] ${textMuted}`}>
             Strumenti
@@ -353,20 +349,14 @@ export default function AdminDashboardPage() {
 
           {/* ── TAB: ANIMAZIONI ───────────────────────────────── */}
           {activeTab === 'animazioni' && (
-            <div className="space-y-4">
-              {ANIMATIONS.map(anim => (
-                <AnimationCard
-                  key={anim.id}
-                  anim={anim}
-                  dark={dark}
-                  cardBg={cardBg}
-                  textPrimary={textPrimary}
-                  textSecondary={textSecondary}
-                  textMuted={textMuted}
-                  borderColor={borderColor}
-                />
-              ))}
-            </div>
+            <AnimationsTab
+              dark={dark}
+              cardBg={cardBg}
+              textPrimary={textPrimary}
+              textSecondary={textSecondary}
+              textMuted={textMuted}
+              borderColor={borderColor}
+            />
           )}
 
           {/* ── TAB: IMMAGINI ──────────────────────────────────── */}
@@ -824,6 +814,184 @@ function BlockMiniPreview({ blockId, dark }: { blockId: string; dark: boolean })
 }
 
 // ── Animation Demo Card ──────────────────────────────────
+
+// ── Animations Tab with Export/Import ─────────────────────
+
+function AnimationsTab({ dark, cardBg, textPrimary, textSecondary, textMuted, borderColor }: {
+  dark: boolean; cardBg: string; textPrimary: string; textSecondary: string; textMuted: string; borderColor: string
+}) {
+  const [animFilter, setAnimFilter] = useState<AnimCategory | 'all'>('all')
+  const [selectedAnims, setSelectedAnims] = useState<Set<string>>(new Set())
+  const [importStatus, setImportStatus] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const filteredAnims = animFilter === 'all'
+    ? ANIMATIONS
+    : ANIMATIONS.filter(a => a.category === animFilter)
+
+  const toggleSelect = (id: string) => {
+    setSelectedAnims(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const selectAll = () => {
+    if (selectedAnims.size === filteredAnims.length) {
+      setSelectedAnims(new Set())
+    } else {
+      setSelectedAnims(new Set(filteredAnims.map(a => a.id)))
+    }
+  }
+
+  const exportSelected = () => {
+    const toExport = ANIMATIONS.filter(a => selectedAnims.has(a.id))
+    const exportData = {
+      version: '1.0.0',
+      platform: 'SAMMA Factory',
+      exportedAt: new Date().toISOString(),
+      animations: toExport.map(a => ({
+        ...a,
+        // Include the GSAP function source as a portable reference
+        _portable: true,
+        _brandAgnostic: true,
+        _note: 'This animation uses CSS variables for colors. Import into any SAMMA Factory project and it will adapt to the target brand automatically.',
+      })),
+      instructions: {
+        import: 'Go to Admin > Animazioni > Import and upload this file.',
+        manual: 'Copy the animation functions from lib/animations.ts to your target project.',
+        brandAdaptation: 'Animations use gsap.from/to on transform+opacity properties. Colors come from CSS variables in the blocks, so they adapt automatically to any brand.',
+      },
+    }
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `samma-animations-${toExport.length}-${Date.now()}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target?.result as string)
+        if (data.animations && Array.isArray(data.animations)) {
+          const count = data.animations.length
+          const names = data.animations.map((a: AnimEntry) => a.name).join(', ')
+          setImportStatus(`Importate ${count} animazioni: ${names}. Per attivarle, copia le funzioni corrispondenti in lib/animations.ts del progetto target.`)
+        } else {
+          setImportStatus('Formato file non valido. Usa un file esportato da SAMMA Factory.')
+        }
+      } catch {
+        setImportStatus('Errore nel parsing del file JSON.')
+      }
+    }
+    reader.readAsText(file)
+    e.target.value = ''
+  }
+
+  return (
+    <>
+      {/* Export/Import toolbar */}
+      <div className={`mb-6 rounded-xl border p-4 ${dark ? 'border-violet-500/20 bg-violet-500/5' : 'border-violet-200 bg-violet-50'}`}>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className={`text-sm font-bold ${textPrimary}`}>Esporta / Importa Animazioni</h3>
+            <p className={`mt-0.5 text-xs ${textSecondary}`}>
+              Trasferisci animazioni tra SAMMA Factory e altri progetti. Le animazioni si adattano automaticamente ai colori del brand target.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
+                dark ? 'border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+              Importa
+            </button>
+            <input ref={fileInputRef} type="file" accept=".json" onChange={handleImport} className="hidden" />
+            <button
+              onClick={exportSelected}
+              disabled={selectedAnims.size === 0}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-colors ${
+                selectedAnims.size > 0
+                  ? 'bg-violet-600 text-white hover:bg-violet-700'
+                  : dark ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-gray-100 text-gray-300 cursor-not-allowed'
+              }`}
+            >
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+              Esporta {selectedAnims.size > 0 ? `(${selectedAnims.size})` : ''}
+            </button>
+          </div>
+        </div>
+
+        {importStatus && (
+          <div className={`mt-3 rounded-lg border p-3 text-xs ${dark ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+            {importStatus}
+            <button onClick={() => setImportStatus(null)} className="ml-2 underline">Chiudi</button>
+          </div>
+        )}
+      </div>
+
+      {/* Category filter + select all */}
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <FilterPill label="Tutte" active={animFilter === 'all'} onClick={() => setAnimFilter('all')} dark={dark} />
+        {(Object.keys(ANIM_CATEGORIES) as AnimCategory[]).map(cat => (
+          <FilterPill key={cat} label={ANIM_CATEGORIES[cat].label} active={animFilter === cat} onClick={() => setAnimFilter(cat)} dark={dark} />
+        ))}
+        <div className="flex-1" />
+        <button
+          onClick={selectAll}
+          className={`text-[11px] font-medium ${dark ? 'text-white/40 hover:text-white/60' : 'text-gray-400 hover:text-gray-600'}`}
+        >
+          {selectedAnims.size === filteredAnims.length ? 'Deseleziona tutto' : 'Seleziona tutto'}
+        </button>
+      </div>
+
+      {/* Animation cards */}
+      <div className="space-y-4">
+        {filteredAnims.map(anim => (
+          <div key={anim.id} className="relative">
+            {/* Selection checkbox */}
+            <div className="absolute left-3 top-3 z-10">
+              <button
+                onClick={() => toggleSelect(anim.id)}
+                className={`flex h-5 w-5 items-center justify-center rounded border transition-colors ${
+                  selectedAnims.has(anim.id)
+                    ? 'border-violet-500 bg-violet-600 text-white'
+                    : dark ? 'border-white/20 bg-white/5 hover:border-violet-400' : 'border-gray-300 bg-white hover:border-violet-400'
+                }`}
+              >
+                {selectedAnims.has(anim.id) && (
+                  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                )}
+              </button>
+            </div>
+            <AnimationCard
+              anim={anim}
+              dark={dark}
+              cardBg={cardBg}
+              textPrimary={textPrimary}
+              textSecondary={textSecondary}
+              textMuted={textMuted}
+              borderColor={borderColor}
+            />
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}
 
 function AnimationCard({ anim, dark, cardBg, textPrimary, textSecondary, textMuted, borderColor }: {
   anim: AnimEntry; dark: boolean; cardBg: string; textPrimary: string; textSecondary: string; textMuted: string; borderColor: string
