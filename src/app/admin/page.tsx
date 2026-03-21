@@ -204,8 +204,11 @@ export default function AdminDashboardPage() {
         {/* Logo */}
         <div className={`flex items-center justify-between border-b px-5 py-5 ${borderColor}`}>
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#EF7B11]">
-              <Zap className="h-5 w-5 text-white" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-[6px] bg-[#0F172A]">
+              <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 10 L10 50 L40 50 L40 30 L60 30 L60 50 L40 70 L10 70 L10 90 L50 90 L90 50 L90 10 Z" fill="#F1F1F8"/>
+                <path d="M90 90 L90 50 L60 50 L60 70 L40 70 L40 50 L60 30 L90 30 L90 10 L50 10 L10 50 L10 90 Z" fill="#F1F1F8" opacity="0.45"/>
+              </svg>
             </div>
             <div>
               <p className={`text-sm font-bold ${textPrimary}`}>SAMMA Factory</p>
@@ -232,7 +235,6 @@ export default function AdminDashboardPage() {
             Design System
           </p>
           <NavItem icon={Layers} label="Blocchi" badge={String(BLOCK_CATALOG.length)} active={activeTab === 'blocchi'} dark={dark} onClick={() => { setActiveTab('blocchi'); setSidebarOpen(false) }} />
-          <NavItem icon={Sparkles} label="Animazioni" badge={String(ANIMATIONS.length)} active={activeTab === 'animazioni'} dark={dark} onClick={() => { setActiveTab('animazioni'); setSidebarOpen(false) }} />
 
           <p className={`mb-2 mt-5 px-3 text-[10px] font-bold uppercase tracking-[0.15em] ${textMuted}`}>
             Strumenti
@@ -272,8 +274,11 @@ export default function AdminDashboardPage() {
             <Menu className="h-6 w-6" />
           </button>
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#EF7B11]">
-              <Zap className="h-4 w-4 text-white" />
+            <div className="flex h-7 w-7 items-center justify-center rounded-[4px] bg-[#0F172A]">
+              <svg width="18" height="18" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 10 L10 50 L40 50 L40 30 L60 30 L60 50 L40 70 L10 70 L10 90 L50 90 L90 50 L90 10 Z" fill="#F1F1F8"/>
+                <path d="M90 90 L90 50 L60 50 L60 70 L40 70 L40 50 L60 30 L90 30 L90 10 L50 10 L10 50 L10 90 Z" fill="#F1F1F8" opacity="0.45"/>
+              </svg>
             </div>
             <span className={`text-sm font-bold ${textPrimary}`}>SAMMA Factory</span>
           </div>
