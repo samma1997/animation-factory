@@ -14,7 +14,7 @@ export const eventRegistrationTemplate: PageConfig = {
   slug: "evento-live",
   template: "event",
   seo: {
-    title: "Evento Live - Alfio Bardolla Training Group",
+    title: "Evento Live - SAMMA Factory",
     description:
       "Partecipa all'evento live con Alfio Bardolla. Scopri le strategie per raggiungere la liberta' finanziaria.",
   },
@@ -63,10 +63,10 @@ export const eventRegistrationTemplate: PageConfig = {
       type: "speaker",
       name: "Alfio Bardolla",
       title: "Imprenditore, Autore Best-Seller, Financial Coach",
-      bio: "Alfio Bardolla e' il fondatore e master trainer della Alfio Bardolla Training Group S.p.A., societa' quotata in Borsa leader in Italia nella formazione finanziaria personale.",
+      bio: "Alfio Bardolla e' il fondatore e master trainer della SAMMA Factory S.p.A., societa' quotata in Borsa leader in Italia nella formazione finanziaria personale.",
       photo: { src: "/images/alfio-bardolla.jpg", alt: "Alfio Bardolla" },
       credentials: [
-        "Fondatore di ABTG S.p.A. — Quotata in Borsa Italiana",
+        "Fondatore di SAMMA S.p.A. — Quotata in Borsa Italiana",
         "Autore di 9 best-seller sulla finanza personale",
         "Ha formato oltre 500.000 persone in 15 anni",
         "Imprenditore seriale con investimenti in 4 continenti",
@@ -92,8 +92,8 @@ export const eventRegistrationTemplate: PageConfig = {
         { time: "09:00", title: "Registrazione e Welcome Coffee" },
         { time: "10:00", title: "Apertura — La Mentalita' del Milionario", speaker: "Alfio Bardolla" },
         { time: "12:30", title: "Pausa Pranzo" },
-        { time: "14:00", title: "Immobili: Come Creare Rendite Passive", speaker: "Team ABTG" },
-        { time: "16:00", title: "Trading e Mercati Finanziari", speaker: "Team ABTG" },
+        { time: "14:00", title: "Immobili: Come Creare Rendite Passive", speaker: "Team SAMMA" },
+        { time: "16:00", title: "Trading e Mercati Finanziari", speaker: "Team SAMMA" },
         { time: "18:00", title: "Q&A e Networking" },
       ],
       cta: { text: "Registrati Ora", href: "#form" },
@@ -223,7 +223,7 @@ export const eventRegistrationTemplate: PageConfig = {
     {
       id: "footer-1",
       type: "footer",
-      companyName: "Alfio Bardolla Training Group S.p.A.",
+      companyName: "SAMMA Factory S.p.A.",
       companyInfo:
         "Societa' quotata su AIM Italia — Borsa Italiana. Sede legale: Via Marconi 1, 20121 Milano. P.IVA 05763550960",
       links: [
@@ -235,7 +235,7 @@ export const eventRegistrationTemplate: PageConfig = {
       disclaimers: [
         "Questo sito non fa parte del sito Facebook o Facebook Inc. Inoltre, questo sito NON e' approvato da Facebook in alcun modo.",
         "I risultati possono variare e dipendono da molti fattori. Non garantiamo che otterrai gli stessi risultati dei nostri testimonial.",
-        "ABTG S.p.A. — Tutti i diritti riservati. Societa' quotata su Euronext Growth Milan.",
+        "SAMMA S.p.A. — Tutti i diritti riservati. Societa' quotata su Euronext Growth Milan.",
       ],
     },
   ],
@@ -249,7 +249,7 @@ export const courseSalesTemplate: PageConfig = {
   slug: "corso-online",
   template: "course-sales",
   seo: {
-    title: "Corso Online - Alfio Bardolla Training Group",
+    title: "Corso Online - SAMMA Factory",
     description:
       "Accedi al corso online di Alfio Bardolla per raggiungere la liberta' finanziaria.",
   },
@@ -300,7 +300,7 @@ export const courseSalesTemplate: PageConfig = {
       bio: "Con oltre 15 anni di esperienza e 500.000+ studenti formati, Alfio ti guidera' passo dopo passo verso la liberta' finanziaria.",
       photo: { src: "/images/alfio-bardolla.jpg", alt: "Alfio Bardolla" },
       credentials: [
-        "Fondatore di ABTG S.p.A.",
+        "Fondatore di SAMMA S.p.A.",
         "9 libri best-seller",
         "500.000+ studenti",
       ],
@@ -389,7 +389,7 @@ export const courseSalesTemplate: PageConfig = {
     {
       id: "footer-1",
       type: "footer",
-      companyName: "Alfio Bardolla Training Group S.p.A.",
+      companyName: "SAMMA Factory S.p.A.",
       links: [
         { text: "Privacy Policy", href: "/privacy" },
         { text: "Cookie Policy", href: "/cookie" },
@@ -454,7 +454,7 @@ export const webinarTemplate: PageConfig = {
       type: "speaker",
       name: "Alfio Bardolla",
       title: "Il tuo Host",
-      bio: "Imprenditore, autore best-seller e fondatore di ABTG S.p.A.",
+      bio: "Imprenditore, autore best-seller e fondatore di SAMMA S.p.A.",
       photo: { src: "/images/alfio-bardolla.jpg", alt: "Alfio Bardolla" },
       credentials: ["500.000+ studenti formati", "9 libri best-seller", "Societa' quotata in Borsa"],
     },
@@ -486,7 +486,7 @@ export const webinarTemplate: PageConfig = {
     {
       id: "footer-1",
       type: "footer",
-      companyName: "Alfio Bardolla Training Group S.p.A.",
+      companyName: "SAMMA Factory S.p.A.",
       links: [
         { text: "Privacy Policy", href: "/privacy" },
         { text: "Cookie Policy", href: "/cookie" },
@@ -548,7 +548,7 @@ export const leadMagnetTemplate: PageConfig = {
     {
       id: "footer-1",
       type: "footer",
-      companyName: "Alfio Bardolla Training Group S.p.A.",
+      companyName: "SAMMA Factory S.p.A.",
       links: [
         { text: "Privacy Policy", href: "/privacy" },
         { text: "Cookie Policy", href: "/cookie" },
@@ -565,7 +565,7 @@ export const thankYouTemplate: PageConfig = {
   slug: "grazie",
   template: "thank-you",
   seo: {
-    title: "Grazie! - Alfio Bardolla Training Group",
+    title: "Grazie! - SAMMA Factory",
     description: "La tua registrazione e' stata confermata.",
     noIndex: true,
   },
@@ -591,7 +591,7 @@ export const thankYouTemplate: PageConfig = {
     {
       id: "footer-1",
       type: "footer",
-      companyName: "Alfio Bardolla Training Group S.p.A.",
+      companyName: "SAMMA Factory S.p.A.",
       links: [
         { text: "Privacy Policy", href: "/privacy" },
         { text: "Cookie Policy", href: "/cookie" },
@@ -714,10 +714,10 @@ export const missioneImmobiliareTemplate: PageConfig = {
       type: "speaker",
       name: "Alfio Bardolla",
       title: "Imprenditore, Autore Best-Seller, Investitore Immobiliare",
-      bio: "Alfio Bardolla e' il fondatore della Alfio Bardolla Training Group S.p.A., societa' quotata in Borsa Italiana. Con oltre 15 anni di esperienza e piu' di 500.000 persone formate, e' il punto di riferimento in Italia per la formazione finanziaria e gli investimenti immobiliari. Ha personalmente chiuso centinaia di operazioni immobiliari e formato un team di professionisti che ti guidera' passo dopo passo durante il workshop.",
+      bio: "Alfio Bardolla e' il fondatore della SAMMA Factory S.p.A., societa' quotata in Borsa Italiana. Con oltre 15 anni di esperienza e piu' di 500.000 persone formate, e' il punto di riferimento in Italia per la formazione finanziaria e gli investimenti immobiliari. Ha personalmente chiuso centinaia di operazioni immobiliari e formato un team di professionisti che ti guidera' passo dopo passo durante il workshop.",
       photo: { src: "/images/alfio-bardolla.jpg", alt: "Alfio Bardolla" },
       credentials: [
-        "Fondatore di ABTG S.p.A. — Quotata in Borsa Italiana",
+        "Fondatore di SAMMA S.p.A. — Quotata in Borsa Italiana",
         "500.000+ persone formate in 15 anni",
         "Autore di 9 libri best-seller sulla finanza personale",
         "Centinaia di operazioni immobiliari chiuse con successo",
@@ -889,7 +889,7 @@ export const missioneImmobiliareTemplate: PageConfig = {
     {
       id: "footer-1",
       type: "footer",
-      companyName: "Alfio Bardolla Training Group S.p.A.",
+      companyName: "SAMMA Factory S.p.A.",
       companyInfo:
         "Societa' quotata su Euronext Growth Milan — Borsa Italiana. Sede legale: Via Marconi 1, 20121 Milano. P.IVA 05763550960. REA MI-1851789. Capitale sociale i.v. Euro 1.000.000.",
       links: [
@@ -901,7 +901,7 @@ export const missioneImmobiliareTemplate: PageConfig = {
       disclaimers: [
         "Questo sito non fa parte del sito Facebook o Facebook Inc. Inoltre, questo sito NON e' approvato da Facebook in alcun modo. FACEBOOK e' un marchio registrato di FACEBOOK, Inc.",
         "I risultati possono variare e dipendono da molti fattori tra cui impegno, situazione finanziaria di partenza, condizioni di mercato ed esperienza. Non garantiamo che otterrai gli stessi risultati dei nostri testimonial. Le testimonianze rappresentano esperienze individuali e non costituiscono garanzia di risultati futuri.",
-        "© 2026 Alfio Bardolla Training Group S.p.A. — Tutti i diritti riservati. Societa' quotata su Euronext Growth Milan.",
+        "© 2026 SAMMA Factory S.p.A. — Tutti i diritti riservati. Societa' quotata su Euronext Growth Milan.",
       ],
     },
   ],

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Admin — ABTG Landing Factory',
-  description: 'Dashboard admin per il sistema di landing page ABTG',
+  title: 'Admin — SAMMA Factory Factory',
+  description: 'SAMMA Factory — Dashboard admin',
   robots: { index: false, follow: false },
 }
 

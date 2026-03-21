@@ -51,12 +51,12 @@ const GITHUB_REPO = 'samma1997/animation-factory'
 const GITHUB_BANK_PATH = 'public/images/bank'
 
 const IMAGE_CATEGORIES = [
-  { id: 'speakers', name: 'Speaker', icon: '🎤', desc: 'Foto speaker e coach (es. Alfio Bardolla, Rodriguez...)', naming: 'speaker-nome-cognome-WxH.jpg' },
+  { id: 'speakers', name: 'Speaker', icon: '🎤', desc: 'Foto speaker e coach (es. speaker, coach, relatori)', naming: 'speaker-nome-cognome-WxH.jpg' },
   { id: 'events', name: 'Eventi', icon: '🎪', desc: 'Foto eventi, palchi, sale, platee', naming: 'event-nome-evento-WxH.jpg' },
   { id: 'immobiliare', name: 'Immobiliare', icon: '🏠', desc: 'Foto immobili, cantieri, ristrutturazioni, rendering', naming: 'immobiliare-descrizione-WxH.jpg' },
   { id: 'trading', name: 'Trading', icon: '📈', desc: 'Schermate trading, grafici, piattaforme', naming: 'trading-descrizione-WxH.jpg' },
   { id: 'backgrounds', name: 'Sfondi', icon: '🖼️', desc: 'Immagini di sfondo per hero sections', naming: 'bg-descrizione-WxH.jpg' },
-  { id: 'logos', name: 'Loghi', icon: '✦', desc: 'Loghi ABTG, partner, media (Rai, Corriere...)', naming: 'logo-nome-WxH.png' },
+  { id: 'logos', name: 'Loghi', icon: '✦', desc: 'Loghi SAMMA, partner, media (Rai, Corriere...)', naming: 'logo-nome-WxH.png' },
   { id: 'testimonials', name: 'Testimonianze', icon: '💬', desc: 'Foto studenti, screenshot risultati', naming: 'testimonial-nome-WxH.jpg' },
   { id: 'icons', name: 'Icone', icon: '◆', desc: 'Icone e illustrazioni personalizzate', naming: 'icon-descrizione-WxH.svg' },
 ]
@@ -164,7 +164,7 @@ export default function AdminDashboardPage() {
   const borderColor = dark ? 'border-white/[0.06]' : 'border-gray-100'
 
   const tabTitles: Record<TabId, string> = {
-    dashboard: 'Landing Page Factory',
+    dashboard: 'SAMMA Factory',
     pagine: 'Pagine',
     blocchi: 'Libreria Blocchi',
     animazioni: 'Animazioni GSAP',
@@ -173,7 +173,7 @@ export default function AdminDashboardPage() {
   }
 
   const tabSubtitles: Record<TabId, string> = {
-    dashboard: 'Alfio Bardolla Training Group \u2014 Gestione landing page',
+    dashboard: 'SAMMA Factory \u2014 La tua fabbrica di siti premium',
     pagine: `${pages.length} pagin${pages.length === 1 ? 'a' : 'e'} nel registro`,
     blocchi: `${BLOCK_CATALOG.length} blocchi riutilizzabili nel design system`,
     animazioni: `${ANIMATIONS.length} animazioni GSAP disponibili`,
@@ -208,8 +208,8 @@ export default function AdminDashboardPage() {
               <Zap className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className={`text-sm font-bold ${textPrimary}`}>ABTG Landing</p>
-              <p className={`text-[11px] ${textMuted}`}>Factory Dashboard</p>
+              <p className={`text-sm font-bold ${textPrimary}`}>SAMMA Factory</p>
+              <p className={`text-[11px] ${textMuted}`}>Dashboard</p>
             </div>
           </div>
           <button
@@ -275,7 +275,7 @@ export default function AdminDashboardPage() {
             <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#EF7B11]">
               <Zap className="h-4 w-4 text-white" />
             </div>
-            <span className={`text-sm font-bold ${textPrimary}`}>ABTG Landing</span>
+            <span className={`text-sm font-bold ${textPrimary}`}>SAMMA Factory</span>
           </div>
           <button onClick={() => setDark(!dark)} className={textSecondary}>
             {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -999,7 +999,7 @@ function AnimationCard({ anim, dark, cardBg, textPrimary, textSecondary, textMut
         el.innerHTML = ''
         const track = document.createElement('div')
         track.style.cssText = 'display:flex;gap:24px;align-items:center;height:100%;white-space:nowrap;width:max-content;'
-        const items = ['ABTG', 'Landing', 'Factory', 'Design']
+        const items = ['SAMMA', 'Landing', 'Factory', 'Design']
         items.forEach(t => {
           const span = document.createElement('span')
           span.style.cssText = `padding:4px 12px;background:#EF7B11;color:white;border-radius:4px;font-size:11px;font-weight:700;`

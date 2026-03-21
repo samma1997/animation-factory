@@ -17,8 +17,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "ABTG Landing Page System",
-  description: "Template system for Alfio Bardolla Training Group landing pages",
+  title: "SAMMA Factory Page System",
+  description: "Template system for SAMMA Factory landing pages",
 };
 
 export default function RootLayout({

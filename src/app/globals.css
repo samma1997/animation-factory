@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* ABTG Brand Colors — extracted from lp.alfiobardolla.com */
+  /* SAMMA Brand Colors — extracted from lp.alfiobardolla.com */
   --color-primary: #060097;
   --color-primary-light: #2d2abf;
   --color-primary-dark: #04006b;

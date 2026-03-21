@@ -16,7 +16,7 @@ export interface FooterLink {
   href: string
 }
 
-export interface FooterABTGProps {
+export interface FooterSAMMAProps {
   companyName?: string
   companyAddress?: string
   companyVat?: string
@@ -30,8 +30,8 @@ export interface FooterABTGProps {
 
 // ── Component ──────────────────────────────────────────
 
-export function FooterABTG({
-  companyName = 'Alfio Bardolla Training Group S.p.A.',
+export function FooterSAMMA({
+  companyName = 'SAMMA Factory S.p.A.',
   companyAddress = 'Via Boscovich 16, 20124 Milano',
   companyVat = 'P.IVA 04aborisci29190965',
   logo,
@@ -47,7 +47,7 @@ export function FooterABTG({
   ],
   copyrightYear,
   id,
-}: FooterABTGProps) {
+}: FooterSAMMAProps) {
   const footerRef = useRef<HTMLElement>(null)
 
   useGSAP(

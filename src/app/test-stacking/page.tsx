@@ -11,7 +11,7 @@ const demoCards = [
   {
     title: 'Struttura dell\'Operazione',
     description:
-      'Dal finanziamento alla negoziazione: costruisci operazioni solide con il metodo step-by-step ABTG, replicabile su ogni deal.',
+      'Dal finanziamento alla negoziazione: costruisci operazioni solide con il metodo step-by-step SAMMA, replicabile su ogni deal.',
   },
   {
     title: 'Acquisizione Immobile',
@@ -82,7 +82,7 @@ export default function TestStackingPage() {
       <StackingCards
         preTitle="Come Funziona"
         title="Il Metodo"
-        titleHighlight="ABTG"
+        titleHighlight="SAMMA"
         cards={demoCards.slice(0, 3)}
         bgColor="dark"
       />

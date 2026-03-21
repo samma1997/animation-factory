@@ -188,7 +188,7 @@ export function StackingCards({
                     zIndex: i + 1,
                   }}
                 >
-                  {/* ── ABTG Card Style (matches PillarCards/NumberedPhases) ── */}
+                  {/* ── SAMMA Card Style (matches PillarCards/NumberedPhases) ── */}
                   <div
                     className={`rounded-2xl p-6 sm:p-8 transition-all duration-300 min-h-[320px] ${
                       isDark
@@ -196,7 +196,7 @@ export function StackingCards({
                         : 'bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:border-[#EF7B11]/20'
                     }`}
                   >
-                    {/* Number badge — ABTG style */}
+                    {/* Number badge — SAMMA style */}
                     <div className="w-12 h-12 rounded-xl bg-[#EF7B11] flex items-center justify-center mb-5">
                       <span className="text-white font-black text-lg">{num}</span>
                     </div>
@@ -260,7 +260,7 @@ export function StackingCards({
                 const num = card.number ?? i + 1
                 return (
                   <div key={i} className="flex-shrink-0 pr-4" style={{ width: '85%' }}>
-                    {/* ── ABTG Card ── */}
+                    {/* ── SAMMA Card ── */}
                     <div
                       className={`rounded-2xl p-6 ${
                         isDark

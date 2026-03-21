@@ -1,5 +1,5 @@
 // ────────────────────────────────────────────────────────
-// Block Library — ABTG Landing Page Factory
+// Block Library — SAMMA Factory Page Factory
 // ────────────────────────────────────────────────────────
 
 export { HeroSplit } from './HeroSplit'
@@ -13,7 +13,7 @@ export { SpeakerCards } from './SpeakerCards'
 export { UrgencySection } from './UrgencySection'
 export { FormSection } from './FormSection'
 export { CTADivider } from './CTADivider'
-export { FooterABTG } from './FooterABTG'
+export { FooterSAMMA } from './FooterSAMMA'
 export { HorizontalScrollCards } from './HorizontalScrollCards'
 export { StackingCards } from './StackingCards'
 
@@ -29,7 +29,7 @@ export type { SpeakerCardsProps, Speaker } from './SpeakerCards'
 export type { UrgencySectionProps } from './UrgencySection'
 export type { FormSectionProps, FormField, EventDetail } from './FormSection'
 export type { CTADividerProps } from './CTADivider'
-export type { FooterABTGProps, FooterLink } from './FooterABTG'
+export type { FooterSAMMAProps, FooterLink } from './FooterSAMMA'
 export type { HorizontalScrollCardsProps, HorizontalScrollCard } from './HorizontalScrollCards'
 export type { StackingCardsProps, StackingCard } from './StackingCards'
 
@@ -48,7 +48,7 @@ import { SpeakerCards } from './SpeakerCards'
 import { UrgencySection } from './UrgencySection'
 import { FormSection } from './FormSection'
 import { CTADivider } from './CTADivider'
-import { FooterABTG } from './FooterABTG'
+import { FooterSAMMA } from './FooterSAMMA'
 import { HorizontalScrollCards } from './HorizontalScrollCards'
 import { StackingCards } from './StackingCards'
 
@@ -170,11 +170,11 @@ export const BLOCK_CATALOG: BlockCatalogEntry[] = [
   },
   {
     id: 'footer-abtg',
-    name: 'Footer ABTG',
+    name: 'Footer SAMMA',
     category: 'layout',
-    component: FooterABTG as unknown as React.ComponentType<Record<string, unknown>>,
+    component: FooterSAMMA as unknown as React.ComponentType<Record<string, unknown>>,
     description:
-      'Footer standard ABTG con logo, link legali, disclaimer e copyright. Sfondo scuro.',
+      'Footer standard SAMMA con logo, link legali, disclaimer e copyright. Sfondo scuro.',
   },
 ]
 

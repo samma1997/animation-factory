@@ -6,16 +6,16 @@ const sampleCards = [
   {
     title: 'Track Record Verificato',
     description:
-      'Dal 2017 i nostri studenti hanno completato oltre 1.200 operazioni immobiliari documentate, con risultati misurabili e replicabili grazie al metodo ABTG.',
+      'Dal 2017 i nostri studenti hanno completato oltre 1.200 operazioni immobiliari documentate, con risultati misurabili e replicabili grazie al metodo SAMMA.',
     stat: '1.200+',
     statLabel: 'Operazioni documentate',
   },
   {
-    title: 'Marco R. — Studente ABTG',
+    title: 'Marco R. — Studente SAMMA',
     description:
       'Il metodo mi ha permesso di lasciare il mio lavoro in azienda e dedicarmi full-time agli investimenti immobiliari. In 18 mesi ho chiuso 4 operazioni.',
     quote:
-      'Prima di ABTG pensavo che investire nel mattone fosse solo per chi aveva milioni. Oggi vivo di rendita immobiliare.',
+      'Prima di SAMMA pensavo che investire nel mattone fosse solo per chi aveva milioni. Oggi vivo di rendita immobiliare.',
     author: 'Marco R.',
     authorRole: 'Ex manager, oggi investitore full-time',
   },
@@ -27,9 +27,9 @@ const sampleCards = [
     statLabel: 'Profitto medio',
   },
   {
-    title: 'Giulia T. — Studentessa ABTG',
+    title: 'Giulia T. — Studentessa SAMMA',
     description:
-      'Partita da zero, senza esperienza nel settore. Il percorso ABTG mi ha dato gli strumenti e la sicurezza per fare la mia prima operazione.',
+      'Partita da zero, senza esperienza nel settore. Il percorso SAMMA mi ha dato gli strumenti e la sicurezza per fare la mia prima operazione.',
     quote:
       'Non avevo mai investito in vita mia. Dopo il corso ho chiuso la mia prima operazione in 90 giorni con un profitto netto di 22.000 euro.',
     author: 'Giulia T.',
@@ -70,7 +70,7 @@ export default function TestHorizontalPage() {
       <HorizontalScrollCards
         title="I Numeri Parlano"
         titleHighlight="Chiaro."
-        subtitle="Risultati concreti dai nostri studenti e dal metodo ABTG applicato sul campo."
+        subtitle="Risultati concreti dai nostri studenti e dal metodo SAMMA applicato sul campo."
         cards={sampleCards}
         bgColor="dark"
         cardWidth="420px"
