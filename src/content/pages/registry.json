@@ -1,23 +1,5 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-03-20T10:00:00Z",
-  "pages": [
-    {
-      "id": "missione-immobiliare-v2",
-      "slug": "missione-immobiliare-v2",
-      "name": "Missione Immobiliare",
-      "status": "live",
-      "category": "immobiliare",
-      "template": "workshop",
-      "createdAt": "2026-03-19T00:00:00Z",
-      "updatedAt": "2026-03-20T09:00:00Z",
-      "deployedAt": "2026-03-20T09:00:00Z",
-      "route": "/missione-immobiliare-v2",
-      "routeType": "hardcoded",
-      "blocks": 12,
-      "hasForm": true,
-      "hasPricing": false,
-      "notes": "Workshop gratuito 4 serate — 27-30 Aprile 2026. Design SAMMA con GSAP animations."
-    }
-  ]
+  "lastUpdated": "2026-03-21T22:00:00Z",
+  "pages": []
 }

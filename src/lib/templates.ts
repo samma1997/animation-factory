@@ -909,10 +909,5 @@ export const missioneImmobiliareTemplate: PageConfig = {
 
 // Template registry for API lookups
 export const templateRegistry: Record<string, PageConfig> = {
-  event: eventRegistrationTemplate,
-  "course-sales": courseSalesTemplate,
-  webinar: webinarTemplate,
-  "lead-magnet": leadMagnetTemplate,
-  "thank-you": thankYouTemplate,
-  "missione-immobiliare": missioneImmobiliareTemplate,
+  // Templates will be added here as we create new pages
 };

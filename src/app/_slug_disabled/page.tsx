@@ -76,7 +76,12 @@ export default async function LandingPage({
 
 // Generate static params for known templates
 export async function generateStaticParams() {
-  return Object.values(templateRegistry).map((config) => ({
+  const slugs = Object.values(templateRegistry).map((config) => ({
     slug: config.slug,
   }));
+  // Return empty array when no templates exist yet
+  return slugs;
 }
+
+// Allow dynamic params to return 404 for unknown slugs
+export const dynamicParams = false;
