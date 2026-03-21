@@ -1,87 +1,128 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* ═══ BRAND TOKENS — Change these for a new brand ═══ */
-  --color-brand: #3B82F6;
-  --color-brand-light: #60A5FA;
-  --color-brand-dark: #2563EB;
-  --color-accent: #EC4899;
-  --color-accent-dark: #DB2777;
-
-  /* ═══ NEUTRALS ═══ */
-  --color-bg: #ffffff;
-  --color-bg-alt: #F8FAFC;
-  --color-surface: #F1F5F9;
-  --color-surface-dark: #0F172A;
-  --color-text: #0F172A;
-  --color-text-secondary: #64748B;
-  --color-text-muted: #94A3B8;
-  --color-text-inverted: #F8FAFC;
-  --color-border: #E2E8F0;
-
-  /* ═══ SEMANTIC ═══ */
+  /* ABTG Brand Colors — extracted from lp.alfiobardolla.com */
+  --color-primary: #060097;
+  --color-primary-light: #2d2abf;
+  --color-primary-dark: #04006b;
+  --color-secondary: #1e293b;
+  --color-secondary-light: #334155;
+  --color-accent: #ffcd57;
+  --color-accent-dark: #e6b84d;
+  --color-purple: #c10fff;
+  --color-purple-light: #d94fff;
+  --color-surface: #F2F5F7;
+  --color-surface-dark: #111827;
+  --color-lavender: #f9f6fe;
+  --color-orange: #EF7B11;
+  --color-orange-dark: #E57712;
+  --color-orange-hover: #d96a0e;
   --color-success: #10B981;
   --color-danger: #EF4444;
-  --color-warning: #F59E0B;
-
-  /* ═══ ADMIN DARK THEME ═══ */
-  --color-admin-bg: #0A0A0F;
-  --color-admin-surface: #111118;
-  --color-admin-elevated: #1A1A24;
-  --color-admin-hover: #22222E;
-  --color-admin-border: #2A2A3A;
-  --color-admin-border-strong: #3A3A50;
-  --color-admin-accent: #7C3AED;
-  --color-admin-accent-glow: rgba(124, 58, 237, 0.2);
-  --color-admin-text: #F1F1F8;
-  --color-admin-text-secondary: #9090A8;
-  --color-admin-text-muted: #5A5A70;
-
-  /* ═══ FONTS ═══ */
-  --font-heading: var(--font-instrument);
+  --color-green-cta: #22c55e;
+  --color-green-cta-dark: #16a34a;
+  --color-trustpilot: #00B67A;
+  --color-background: #ffffff;
+  --color-foreground: #1e293b;
+  --color-muted: #67768e;
+  --font-heading: var(--font-plus-jakarta);
   --font-body: var(--font-inter);
 }
 
-/* ═══ BASE STYLES ═══ */
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body), 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Smooth scroll */
 html {
   scroll-behavior: smooth;
 }
 
-body {
-  font-family: var(--font-body), system-ui, -apple-system, sans-serif;
-  color: var(--color-text);
-  background-color: var(--color-bg);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading), var(--font-body), system-ui, sans-serif;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
 }
 
-/* ═══ ADMIN DARK CUSTOM SCROLLBAR ═══ */
-.admin-layout {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-admin-border-strong) var(--color-admin-bg);
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
 }
 
-.admin-layout *::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }
 
-.admin-layout *::-webkit-scrollbar-track {
-  background: var(--color-admin-bg);
+/* HubSpot form overrides */
+.hs-form .hs-input {
+  width: 100% !important;
+  padding: 12px 16px !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
 }
 
-.admin-layout *::-webkit-scrollbar-thumb {
-  background: var(--color-admin-border-strong);
-  border-radius: 3px;
+.hs-form .hs-button {
+  background-color: var(--color-accent) !important;
+  color: var(--color-secondary) !important;
+  border: none !important;
+  padding: 18px 40px !important;
+  border-radius: 50px !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  transition: all 0.3s ease !important;
+  font-family: var(--font-heading), 'Plus Jakarta Sans', sans-serif !important;
 }
 
-.admin-layout *::-webkit-scrollbar-thumb:hover {
-  background: var(--color-admin-accent);
+.hs-form .hs-button:hover {
+  background-color: var(--color-accent-dark) !important;
+  transform: scale(1.02) !important;
+}
+
+/* GSAP animation utilities */
+.split-text-line {
+  overflow: hidden;
+}
+.split-text-line > span {
+  will-change: transform;
+}
+
+/* Smooth cursor for GSAP drag */
+.gsap-dragging {
+  cursor: grabbing !important;
+}
+
+/* Pulse glow animation for CTA */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 205, 87, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(255, 205, 87, 0.6); }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Counter animation font */
+.counter-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lenis smooth scroll - disable native scroll-behavior */
+html.lenis, html.lenis body {
+  scroll-behavior: auto;
+}
+
+html.lenis {
+  height: auto;
 }

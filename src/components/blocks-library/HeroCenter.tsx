@@ -1,153 +1,164 @@
-"use client";
+'use client'
 
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { registerGSAP, fadeUp, fadeIn } from "@/lib/animations";
+import { useRef } from 'react'
+import { gsap } from 'gsap'
+import { useGSAP } from '@gsap/react'
+import { ArrowRight } from 'lucide-react'
+
+const BASE_PATH = '/animation-factory'
+
+// ── Types ──────────────────────────────────────────────
 
 export interface HeroCenterProps {
-  eyebrow?: string;
-  title: string;
-  subtitle?: string;
-  ctaLabel?: string;
-  ctaHref?: string;
-  secondaryCtaLabel?: string;
-  secondaryCtaHref?: string;
-  backgroundStyle?: "gradient" | "solid" | "mesh";
-  animated?: boolean;
+  preTitle?: string
+  title: string
+  titleHighlight?: string
+  subtitle: string
+  ctaText: string
+  ctaHref?: string
+  ctaSubtext?: string
+  bgImage?: string
+  overlayOpacity?: number
+  badge?: string
+  secondaryCtaText?: string
+  secondaryCtaHref?: string
 }
 
-export const heroCenterPreviewProps: HeroCenterProps = {
-  eyebrow: "Nuova piattaforma",
-  title: "Costruisci siti animati di livello premium",
-  subtitle:
-    "Animation Factory ti fornisce i blocchi e le animazioni per creare esperienze web indimenticabili in metà del tempo.",
-  ctaLabel: "Inizia ora",
-  ctaHref: "#",
-  secondaryCtaLabel: "Scopri di più",
-  secondaryCtaHref: "#",
-  backgroundStyle: "gradient",
-  animated: true,
-};
+// ── Component ──────────────────────────────────────────
 
 export function HeroCenter({
-  eyebrow,
+  preTitle,
   title,
+  titleHighlight,
   subtitle,
-  ctaLabel = "Inizia ora",
-  ctaHref = "#",
-  secondaryCtaLabel,
-  secondaryCtaHref = "#",
-  backgroundStyle = "gradient",
-  animated = true,
+  ctaText,
+  ctaHref = '#form',
+  ctaSubtext,
+  bgImage,
+  overlayOpacity = 0.75,
+  badge,
+  secondaryCtaText,
+  secondaryCtaHref = '#programma',
 }: HeroCenterProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const eyebrowRef = useRef<HTMLSpanElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const ctasRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null)
 
-  useEffect(() => {
-    if (!animated) return;
-    registerGSAP();
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-      if (eyebrowRef.current) {
-        tl.from(eyebrowRef.current, { opacity: 0, y: 20, duration: 0.6 }, 0);
+      // Badge
+      const badgeEl = sectionRef.current.querySelector('.hero-badge')
+      if (badgeEl) {
+        gsap.set(badgeEl, { opacity: 0, scale: 0.6 })
+        tl.to(badgeEl, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }, 0.1)
       }
-      if (titleRef.current) {
-        tl.from(titleRef.current, { opacity: 0, y: 40, duration: 0.9 }, 0.15);
-      }
-      if (subtitleRef.current) {
-        tl.from(subtitleRef.current, { opacity: 0, y: 30, duration: 0.7 }, 0.35);
-      }
-      if (ctasRef.current) {
-        tl.from(ctasRef.current.children, { opacity: 0, y: 20, stagger: 0.1, duration: 0.6 }, 0.5);
-      }
-    }, containerRef);
 
-    return () => ctx.revert();
-  }, [animated]);
+      // Headline reveal
+      const lines = sectionRef.current.querySelectorAll('.hero-line')
+      if (lines.length) {
+        gsap.set(lines, { yPercent: 120 })
+        tl.to(lines, { yPercent: 0, duration: 0.9, stagger: 0.1 }, 0.25)
+      }
 
-  const bgStyles: Record<string, React.CSSProperties> = {
-    gradient: {
-      background:
-        "linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-alt) 50%, var(--color-surface) 100%)",
+      // Subtitle
+      const sub = sectionRef.current.querySelector('.hero-sub')
+      if (sub) {
+        gsap.set(sub, { opacity: 0, y: 25 })
+        tl.to(sub, { opacity: 1, y: 0, duration: 0.7 }, 0.7)
+      }
+
+      // CTA area
+      const cta = sectionRef.current.querySelector('.hero-cta-area')
+      if (cta) {
+        gsap.set(cta, { opacity: 0, y: 25 })
+        tl.to(cta, { opacity: 1, y: 0, duration: 0.6 }, 0.9)
+      }
     },
-    solid: { backgroundColor: "var(--color-bg)" },
-    mesh: {
-      background:
-        "radial-gradient(ellipse at 20% 50%, var(--color-brand-light)15 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, var(--color-accent)10 0%, transparent 50%), var(--color-bg)",
-    },
-  };
+    { scope: sectionRef }
+  )
+
+  const bg = bgImage ? `${BASE_PATH}${bgImage}` : undefined
+
+  // Split title into lines for animation
+  const titleParts = title.split('\n').length > 1 ? title.split('\n') : [title]
 
   return (
     <section
-      ref={containerRef}
-      style={bgStyles[backgroundStyle]}
-      className="relative overflow-hidden py-24 md:py-36 px-6"
+      ref={sectionRef}
+      className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-[#1e293b]"
     >
-      <div className="max-w-3xl mx-auto text-center">
-        {eyebrow && (
-          <span
-            ref={eyebrowRef}
-            className="inline-block mb-4 text-sm font-semibold px-3 py-1 rounded-full"
-            style={{
-              color: "var(--color-brand)",
-              backgroundColor: "var(--color-brand)15",
-              border: "1px solid var(--color-brand)30",
-            }}
-          >
-            {eyebrow}
+      {/* Background */}
+      {bg && (
+        <div className="absolute inset-0 z-0">
+          <img src={bg} alt="" className="w-full h-full object-cover" />
+          <div
+            className="absolute inset-0"
+            style={{ backgroundColor: `rgba(30,41,59,${overlayOpacity})` }}
+          />
+        </div>
+      )}
+
+      {!bg && (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1e293b] via-[#1e293b] to-[#0f172a] z-0" />
+      )}
+
+      {/* Glow accents */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#EF7B11]/8 rounded-full blur-[150px] z-0" />
+
+      <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 py-20">
+        {badge && (
+          <span className="hero-badge inline-block bg-[#EF7B11]/15 text-[#EF7B11] border border-[#EF7B11]/30 rounded-full px-5 py-1.5 text-sm font-semibold mb-6">
+            {badge}
           </span>
         )}
 
-        <h1
-          ref={titleRef}
-          className="text-4xl md:text-6xl font-semibold tracking-tight mb-6"
-          style={{
-            fontFamily: "var(--font-heading)",
-            color: "var(--color-text)",
-            lineHeight: 1.1,
-          }}
-        >
-          {title}
-        </h1>
-
-        {subtitle && (
-          <p
-            ref={subtitleRef}
-            className="text-lg md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto"
-            style={{ color: "var(--color-text-secondary)" }}
-          >
-            {subtitle}
+        {preTitle && (
+          <p className="text-[#EF7B11] font-semibold text-sm uppercase tracking-wider mb-4">
+            {preTitle}
           </p>
         )}
 
-        <div ref={ctasRef} className="flex flex-wrap gap-4 justify-center">
+        <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white leading-tight mb-6">
+          {titleParts.map((line, i) => (
+            <span key={i} className="block overflow-hidden">
+              <span className="hero-line block">
+                {line}
+                {i === titleParts.length - 1 && titleHighlight && (
+                  <span className="text-[#EF7B11]"> {titleHighlight}</span>
+                )}
+              </span>
+            </span>
+          ))}
+        </h1>
+
+        <p className="hero-sub text-lg sm:text-xl text-white/70 leading-relaxed max-w-2xl mx-auto mb-8">
+          {subtitle}
+        </p>
+
+        <div className="hero-cta-area flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
             href={ctaHref}
-            className="inline-flex items-center px-7 py-3.5 rounded-lg font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "var(--color-brand)" }}
+            className="inline-flex items-center gap-2 bg-[#22c55e] hover:bg-[#16a34a] text-white font-bold text-lg px-8 py-4 rounded-xl transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] shadow-lg shadow-[#22c55e]/25"
           >
-            {ctaLabel}
+            {ctaText}
+            <ArrowRight className="w-5 h-5" />
           </a>
-          {secondaryCtaLabel && (
+
+          {secondaryCtaText && (
             <a
               href={secondaryCtaHref}
-              className="inline-flex items-center px-7 py-3.5 rounded-lg font-semibold transition-colors"
-              style={{
-                color: "var(--color-text)",
-                border: "1px solid var(--color-border)",
-                backgroundColor: "transparent",
-              }}
+              className="inline-flex items-center gap-2 text-white/70 hover:text-white font-semibold text-base border border-white/20 hover:border-white/40 px-6 py-3.5 rounded-xl transition-all duration-200"
             >
-              {secondaryCtaLabel}
+              {secondaryCtaText}
             </a>
           )}
         </div>
+
+        {ctaSubtext && (
+          <p className="text-white/40 text-sm mt-4">{ctaSubtext}</p>
+        )}
       </div>
     </section>
-  );
+  )
 }

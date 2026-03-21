@@ -1,443 +1,393 @@
-/**
- * Animation Factory — Animation Library
- * GSAP-based animation utilities for building premium animated websites.
- * All animations use CSS variables for brand consistency.
- */
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger)
 
-// Register plugins — call this once at app entry or in each component
-export function registerGSAP() {
-  if (typeof window !== "undefined") {
-    gsap.registerPlugin(ScrollTrigger);
-  }
-}
+// ────────────────────────────────────────────────────────
+// Types
+// ────────────────────────────────────────────────────────
 
-// ─── Context ───────────────────────────────────────────────────────────────────
+type AnimOpts = gsap.TweenVars
+type CleanupFn = () => void
 
-/**
- * Create a GSAP context scoped to a container ref.
- * Always call ctx.revert() in a cleanup function.
- */
-export function createAnimContext(container: Element | null) {
-  return gsap.context(() => {}, container ?? undefined);
-}
+// ────────────────────────────────────────────────────────
+// Entrance Animations
+// ────────────────────────────────────────────────────────
 
-// ─── Entrance Animations ──────────────────────────────────────────────────────
-
-export interface FadeUpOptions {
-  duration?: number;
-  delay?: number;
-  y?: number;
-  ease?: string;
-}
-
-export function fadeUp(
-  target: gsap.TweenTarget,
-  options: FadeUpOptions = {}
-): gsap.core.Tween {
-  const { duration = 0.8, delay = 0, y = 40, ease = "power3.out" } = options;
-  return gsap.from(target, {
+/** Fade element up from below */
+export function fadeUp(el: gsap.TweenTarget, opts?: AnimOpts): CleanupFn {
+  const tween = gsap.from(el, {
+    y: 40,
     opacity: 0,
-    y,
-    duration,
-    delay,
-    ease,
-  });
+    duration: 0.8,
+    ease: 'power2.out',
+    ...opts,
+  })
+  return () => tween.kill()
 }
 
-export function fadeIn(
-  target: gsap.TweenTarget,
-  options: { duration?: number; delay?: number } = {}
-): gsap.core.Tween {
-  const { duration = 0.6, delay = 0 } = options;
-  return gsap.from(target, {
+/** Simple fade in */
+export function fadeIn(el: gsap.TweenTarget, opts?: AnimOpts): CleanupFn {
+  const tween = gsap.from(el, {
     opacity: 0,
-    duration,
-    delay,
-    ease: "power2.out",
-  });
+    duration: 0.6,
+    ease: 'power2.out',
+    ...opts,
+  })
+  return () => tween.kill()
 }
 
-export function slideInLeft(
-  target: gsap.TweenTarget,
-  options: { duration?: number; delay?: number; x?: number } = {}
-): gsap.core.Tween {
-  const { duration = 0.8, delay = 0, x = -60 } = options;
-  return gsap.from(target, {
+/** Slide in from the left */
+export function slideInLeft(el: gsap.TweenTarget, opts?: AnimOpts): CleanupFn {
+  const tween = gsap.from(el, {
+    x: -60,
     opacity: 0,
-    x,
-    duration,
-    delay,
-    ease: "power3.out",
-  });
+    duration: 0.8,
+    ease: 'power3.out',
+    ...opts,
+  })
+  return () => tween.kill()
 }
 
-export function slideInRight(
-  target: gsap.TweenTarget,
-  options: { duration?: number; delay?: number; x?: number } = {}
-): gsap.core.Tween {
-  const { duration = 0.8, delay = 0, x = 60 } = options;
-  return gsap.from(target, {
+/** Slide in from the right */
+export function slideInRight(el: gsap.TweenTarget, opts?: AnimOpts): CleanupFn {
+  const tween = gsap.from(el, {
+    x: 60,
     opacity: 0,
-    x,
-    duration,
-    delay,
-    ease: "power3.out",
-  });
+    duration: 0.8,
+    ease: 'power3.out',
+    ...opts,
+  })
+  return () => tween.kill()
 }
 
-export function scaleUp(
-  target: gsap.TweenTarget,
-  options: { duration?: number; delay?: number; scale?: number } = {}
-): gsap.core.Tween {
-  const { duration = 0.7, delay = 0, scale = 0.85 } = options;
-  return gsap.from(target, {
+/** Scale up from smaller size */
+export function scaleUp(el: gsap.TweenTarget, opts?: AnimOpts): CleanupFn {
+  const tween = gsap.from(el, {
+    scale: 0.85,
     opacity: 0,
-    scale,
-    duration,
-    delay,
-    ease: "back.out(1.4)",
-  });
+    duration: 0.7,
+    ease: 'back.out(1.4)',
+    ...opts,
+  })
+  return () => tween.kill()
 }
 
+/** Clip-path reveal from a direction */
 export function clipReveal(
-  target: gsap.TweenTarget,
-  options: { duration?: number; delay?: number; direction?: "up" | "down" | "left" | "right" } = {}
-): gsap.core.Tween {
-  const { duration = 0.9, delay = 0, direction = "up" } = options;
-
-  const clipMap = {
-    up: ["inset(100% 0 0 0)", "inset(0% 0 0 0)"],
-    down: ["inset(0 0 100% 0)", "inset(0 0 0% 0)"],
-    left: ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
-    right: ["inset(0 0 0 100%)", "inset(0 0 0 0%)"],
-  };
-
-  const [from, to] = clipMap[direction];
-
-  return gsap.fromTo(
-    target,
-    { clipPath: from, opacity: 1 },
-    { clipPath: to, duration, delay, ease: "power4.out" }
-  );
-}
-
-// ─── Scroll Animations ────────────────────────────────────────────────────────
-
-export interface ScrollAnimOptions {
-  start?: string;
-  end?: string;
-  markers?: boolean;
-}
-
-export function scrollFadeUp(
-  target: gsap.TweenTarget,
-  options: FadeUpOptions & ScrollAnimOptions = {}
-) {
-  const {
-    duration = 0.9,
-    y = 50,
-    ease = "power3.out",
-    start = "top 85%",
-    markers = false,
-  } = options;
-
-  return gsap.from(target, {
-    opacity: 0,
-    y,
-    duration,
-    ease,
-    scrollTrigger: {
-      trigger: target as Element,
-      start,
-      markers,
-      toggleActions: "play none none none",
-    },
-  });
-}
-
-export function scrollStagger(
-  targets: gsap.TweenTarget,
-  options: {
-    stagger?: number;
-    duration?: number;
-    y?: number;
-    ease?: string;
-    start?: string;
-    markers?: boolean;
-  } = {}
-) {
-  const {
-    stagger = 0.12,
-    duration = 0.7,
-    y = 30,
-    ease = "power3.out",
-    start = "top 85%",
-    markers = false,
-  } = options;
-
-  return gsap.from(targets, {
-    opacity: 0,
-    y,
-    duration,
-    stagger,
-    ease,
-    scrollTrigger: {
-      trigger: (targets as Element[])[0] ?? (targets as Element),
-      start,
-      markers,
-      toggleActions: "play none none none",
-    },
-  });
-}
-
-export function scrollCounter(
-  target: Element,
-  options: {
-    end: number;
-    duration?: number;
-    start?: string;
-    prefix?: string;
-    suffix?: string;
+  el: gsap.TweenTarget,
+  direction: 'up' | 'down' | 'left' | 'right' = 'up',
+  opts?: AnimOpts
+): CleanupFn {
+  const clipMap: Record<string, string> = {
+    up: 'inset(100% 0 0 0)',
+    down: 'inset(0 0 100% 0)',
+    left: 'inset(0 100% 0 0)',
+    right: 'inset(0 0 0 100%)',
   }
-) {
-  const { end, duration = 2, start = "top 80%", prefix = "", suffix = "" } = options;
+  gsap.set(el, { clipPath: clipMap[direction] })
+  const tween = gsap.to(el, {
+    clipPath: 'inset(0% 0% 0% 0%)',
+    duration: 1,
+    ease: 'power4.inOut',
+    ...opts,
+  })
+  return () => tween.kill()
+}
 
-  const obj = { value: 0 };
+// ────────────────────────────────────────────────────────
+// Scroll-Triggered Animations
+// ────────────────────────────────────────────────────────
 
-  return gsap.to(obj, {
-    value: end,
-    duration,
-    ease: "power2.out",
+/** Fade up on scroll into view */
+export function scrollFadeUp(el: gsap.TweenTarget, opts?: AnimOpts): CleanupFn {
+  const tween = gsap.from(el, {
+    y: 50,
+    opacity: 0,
+    duration: 0.8,
+    ease: 'power2.out',
     scrollTrigger: {
-      trigger: target,
-      start,
-      toggleActions: "play none none none",
+      trigger: el as gsap.DOMTarget,
+      start: 'top 85%',
+      toggleActions: 'play none none none',
+    },
+    ...opts,
+  })
+  return () => {
+    tween.scrollTrigger?.kill()
+    tween.kill()
+  }
+}
+
+/** Stagger children on scroll */
+export function scrollStagger(
+  parent: gsap.DOMTarget,
+  childSelector: string,
+  opts?: AnimOpts
+): CleanupFn {
+  const children = (parent as Element).querySelectorAll(childSelector)
+  if (!children.length) return () => {}
+  gsap.set(children, { opacity: 0, y: 30 })
+  const tween = gsap.to(children, {
+    opacity: 1,
+    y: 0,
+    duration: 0.6,
+    stagger: 0.12,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: parent,
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+    },
+    ...opts,
+  })
+  return () => {
+    tween.scrollTrigger?.kill()
+    tween.kill()
+  }
+}
+
+/** Animate a number counting up on scroll */
+export function scrollCounter(
+  el: HTMLElement,
+  target: number,
+  opts?: { duration?: number; prefix?: string; suffix?: string; decimals?: number }
+): CleanupFn {
+  const obj = { val: 0 }
+  const prefix = opts?.prefix ?? ''
+  const suffix = opts?.suffix ?? ''
+  const decimals = opts?.decimals ?? 0
+
+  const tween = gsap.to(obj, {
+    val: target,
+    duration: opts?.duration ?? 2,
+    ease: 'power1.out',
+    scrollTrigger: {
+      trigger: el,
+      start: 'top 85%',
+      toggleActions: 'play none none none',
     },
     onUpdate() {
-      target.textContent = `${prefix}${Math.round(obj.value)}${suffix}`;
+      el.textContent = `${prefix}${obj.val.toFixed(decimals)}${suffix}`
     },
-  });
-}
-
-// ─── Interactive Animations ───────────────────────────────────────────────────
-
-export function magneticHover(
-  element: HTMLElement,
-  options: { strength?: number } = {}
-): () => void {
-  const { strength = 0.3 } = options;
-
-  const handleMouseMove = (e: MouseEvent) => {
-    const rect = element.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const deltaX = (e.clientX - centerX) * strength;
-    const deltaY = (e.clientY - centerY) * strength;
-
-    gsap.to(element, {
-      x: deltaX,
-      y: deltaY,
-      duration: 0.4,
-      ease: "power2.out",
-    });
-  };
-
-  const handleMouseLeave = () => {
-    gsap.to(element, {
-      x: 0,
-      y: 0,
-      duration: 0.6,
-      ease: "elastic.out(1, 0.5)",
-    });
-  };
-
-  element.addEventListener("mousemove", handleMouseMove);
-  element.addEventListener("mouseleave", handleMouseLeave);
-
+  })
   return () => {
-    element.removeEventListener("mousemove", handleMouseMove);
-    element.removeEventListener("mouseleave", handleMouseLeave);
-  };
+    tween.scrollTrigger?.kill()
+    tween.kill()
+  }
 }
 
-export function buttonHoverFill(
-  button: HTMLElement,
-  options: { fillColor?: string } = {}
-): () => void {
-  const { fillColor = "var(--color-brand-dark)" } = options;
+// ────────────────────────────────────────────────────────
+// Micro-Interactions
+// ────────────────────────────────────────────────────────
 
-  const handleEnter = () => {
-    gsap.to(button, {
-      backgroundColor: fillColor,
-      scale: 1.03,
-      duration: 0.25,
-      ease: "power2.out",
-    });
-  };
-
+/** Magnetic hover effect — element follows cursor within bounds */
+export function magneticHover(el: HTMLElement, strength: number = 0.3): CleanupFn {
+  const handleMove = (e: MouseEvent) => {
+    const rect = el.getBoundingClientRect()
+    const x = e.clientX - rect.left - rect.width / 2
+    const y = e.clientY - rect.top - rect.height / 2
+    gsap.to(el, { x: x * strength, y: y * strength, duration: 0.3, ease: 'power2.out' })
+  }
   const handleLeave = () => {
-    gsap.to(button, {
-      backgroundColor: "",
-      scale: 1,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-  };
+    gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1,0.3)' })
+  }
+  el.addEventListener('mousemove', handleMove)
+  el.addEventListener('mouseleave', handleLeave)
+  return () => {
+    el.removeEventListener('mousemove', handleMove)
+    el.removeEventListener('mouseleave', handleLeave)
+  }
+}
 
-  button.addEventListener("mouseenter", handleEnter);
-  button.addEventListener("mouseleave", handleLeave);
+/** CTA button hover fill animation */
+export function buttonHoverFill(el: HTMLElement): CleanupFn {
+  const fill = document.createElement('span')
+  fill.style.cssText =
+    'position:absolute;inset:0;border-radius:inherit;background:rgba(255,255,255,0.15);transform:scaleX(0);transform-origin:left;pointer-events:none;'
+  el.style.position = 'relative'
+  el.style.overflow = 'hidden'
+  el.appendChild(fill)
+
+  const handleEnter = () => gsap.to(fill, { scaleX: 1, duration: 0.4, ease: 'power2.out' })
+  const handleLeave = () => gsap.to(fill, { scaleX: 0, duration: 0.3, ease: 'power2.in' })
+
+  el.addEventListener('mouseenter', handleEnter)
+  el.addEventListener('mouseleave', handleLeave)
+  return () => {
+    el.removeEventListener('mouseenter', handleEnter)
+    el.removeEventListener('mouseleave', handleLeave)
+    fill.remove()
+  }
+}
+
+// ────────────────────────────────────────────────────────
+// Text Animations
+// ────────────────────────────────────────────────────────
+
+/** Reveal text by lines with overflow clip */
+export function textRevealLines(el: HTMLElement, opts?: AnimOpts): CleanupFn {
+  const text = el.textContent || ''
+  const words = text.split(' ')
+  const linesPerGroup = Math.ceil(words.length / 3)
+  el.innerHTML = ''
+  const spans: HTMLElement[] = []
+
+  for (let i = 0; i < words.length; i += linesPerGroup) {
+    const wrapper = document.createElement('span')
+    wrapper.style.display = 'block'
+    wrapper.style.overflow = 'hidden'
+    const inner = document.createElement('span')
+    inner.style.display = 'block'
+    inner.textContent = words.slice(i, i + linesPerGroup).join(' ')
+    wrapper.appendChild(inner)
+    el.appendChild(wrapper)
+    spans.push(inner)
+  }
+
+  gsap.set(spans, { yPercent: 110 })
+  const tween = gsap.to(spans, {
+    yPercent: 0,
+    duration: 0.9,
+    stagger: 0.1,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: el,
+      start: 'top 85%',
+      toggleActions: 'play none none none',
+    },
+    ...opts,
+  })
 
   return () => {
-    button.removeEventListener("mouseenter", handleEnter);
-    button.removeEventListener("mouseleave", handleLeave);
-  };
+    tween.scrollTrigger?.kill()
+    tween.kill()
+  }
 }
 
-// ─── Text Animations ──────────────────────────────────────────────────────────
-
-/**
- * Splits a heading element into lines and animates each in with a stagger.
- * Requires the element to have a fixed width (or be in a constrained container).
- */
-export function textRevealLines(
-  element: HTMLElement,
-  options: {
-    duration?: number;
-    stagger?: number;
-    delay?: number;
-    useScrollTrigger?: boolean;
-    start?: string;
-  } = {}
-): gsap.core.Timeline {
-  const {
-    duration = 0.9,
-    stagger = 0.08,
-    delay = 0,
-    useScrollTrigger = false,
-    start = "top 80%",
-  } = options;
-
-  const text = element.textContent ?? "";
-  const words = text.split(" ");
-
-  // Wrap each word in a span
-  element.innerHTML = words
-    .map(
-      (word) =>
-        `<span style="overflow:hidden;display:inline-block;"><span class="word" style="display:inline-block;">${word}&nbsp;</span></span>`
-    )
-    .join("");
-
-  const wordEls = element.querySelectorAll(".word");
-
-  const tl = gsap.timeline({
-    delay,
-    scrollTrigger: useScrollTrigger
-      ? {
-          trigger: element,
-          start,
-          toggleActions: "play none none none",
-        }
-      : undefined,
-  });
-
-  tl.from(wordEls, {
-    y: "110%",
-    opacity: 0,
-    duration,
-    stagger,
-    ease: "power4.out",
-  });
-
-  return tl;
-}
-
+/** Typewriter effect */
 export function typewriter(
-  element: HTMLElement,
-  options: {
-    text?: string;
-    speed?: number;
-    delay?: number;
-    cursor?: boolean;
-  } = {}
-): gsap.core.Timeline {
-  const {
-    text = element.textContent ?? "",
-    speed = 0.04,
-    delay = 0,
-    cursor = true,
-  } = options;
+  el: HTMLElement,
+  text: string,
+  opts?: { speed?: number; delay?: number }
+): CleanupFn {
+  const speed = opts?.speed ?? 0.04
+  const delay = opts?.delay ?? 0
+  el.textContent = ''
+  const chars = text.split('')
+  let killed = false
 
-  element.textContent = "";
-
-  if (cursor) {
-    element.style.borderRight = "2px solid var(--color-brand)";
-  }
-
-  const tl = gsap.timeline({ delay });
-  const chars = text.split("");
-
+  const tl = gsap.timeline({ delay })
   chars.forEach((char, i) => {
-    tl.add(() => {
-      element.textContent = text.slice(0, i + 1);
-    }, i * speed);
-  });
+    tl.call(
+      () => {
+        if (!killed) el.textContent += char
+      },
+      [],
+      i * speed
+    )
+  })
 
-  if (cursor) {
-    tl.add(() => {
-      element.style.borderRight = "none";
-    });
+  return () => {
+    killed = true
+    tl.kill()
   }
-
-  return tl;
 }
 
-// ─── Advanced Scroll Animations ───────────────────────────────────────────────
+// ────────────────────────────────────────────────────────
+// Utility / Layout Animations
+// ────────────────────────────────────────────────────────
 
+/** Infinite horizontal marquee scroll for a track element */
 export function scrollMarquee(
   track: HTMLElement,
-  options: {
-    speed?: number;
-    direction?: "left" | "right";
-  } = {}
-) {
-  const { speed = 30, direction = "left" } = options;
-  const trackWidth = track.scrollWidth / 2;
+  opts?: { speed?: number; direction?: 'left' | 'right'; pauseOnHover?: boolean }
+): CleanupFn {
+  const speed = opts?.speed ?? 40 // seconds for one full cycle
+  const direction = opts?.direction ?? 'left'
 
-  return gsap.to(track, {
-    x: direction === "left" ? -trackWidth : trackWidth,
-    duration: trackWidth / speed,
-    ease: "none",
+  // Clone content for seamless loop
+  const clone = track.innerHTML
+  track.innerHTML = clone + clone
+
+  const xPercent = direction === 'left' ? -50 : 50
+  const fromPercent = direction === 'left' ? 0 : -50
+
+  gsap.set(track, { xPercent: fromPercent })
+
+  const tween = gsap.to(track, {
+    xPercent,
+    duration: speed,
+    ease: 'none',
     repeat: -1,
-    modifiers: {
-      x: (x: string) => {
-        const parsed = parseFloat(x);
-        if (direction === "left") {
-          return `${parsed % trackWidth}px`;
-        }
-        return `${((parsed % trackWidth) + trackWidth) % trackWidth}px`;
-      },
-    },
-  });
+  })
+
+  if (opts?.pauseOnHover) {
+    const parent = track.parentElement
+    if (parent) {
+      const pause = () => gsap.to(tween, { timeScale: 0, duration: 0.5 })
+      const resume = () => gsap.to(tween, { timeScale: 1, duration: 0.5 })
+      parent.addEventListener('mouseenter', pause)
+      parent.addEventListener('mouseleave', resume)
+      return () => {
+        parent.removeEventListener('mouseenter', pause)
+        parent.removeEventListener('mouseleave', resume)
+        tween.kill()
+      }
+    }
+  }
+
+  return () => tween.kill()
 }
 
+// ────────────────────────────────────────────────────────
+// Horizontal Scroll Pin
+// ────────────────────────────────────────────────────────
+
+/**
+ * Pin a container and scroll a track horizontally as user scrolls vertically.
+ * Only activates on desktop (min-width: 768px).
+ * Returns a cleanup function that kills all ScrollTrigger instances.
+ */
 export function horizontalScrollPin(
   container: HTMLElement,
-  panels: HTMLElement[]
-) {
-  const totalWidth = panels.length * 100;
+  track: HTMLElement,
+  opts?: { scrub?: number; start?: string }
+): CleanupFn {
+  const scrub = opts?.scrub ?? 1
+  const start = opts?.start ?? 'top top'
 
-  return gsap.to(panels, {
-    xPercent: -100 * (panels.length - 1),
-    ease: "none",
-    scrollTrigger: {
-      trigger: container,
-      pin: true,
-      scrub: 1,
-      end: `+=${totalWidth}%`,
-    },
-  });
+  const mm = gsap.matchMedia()
+
+  mm.add('(min-width: 768px)', () => {
+    // Calculate distance: how far the track needs to move
+    const scrollDistance = track.scrollWidth - container.offsetWidth
+
+    gsap.to(track, {
+      x: -scrollDistance,
+      ease: 'none',
+      force3D: true,
+      scrollTrigger: {
+        trigger: container,
+        pin: true,
+        scrub,
+        start,
+        end: `+=${scrollDistance}`,
+        invalidateOnRefresh: true,
+      },
+    })
+  })
+
+  return () => mm.revert()
+}
+
+/** Create a GSAP context for React component cleanup */
+export function createAnimContext(
+  scope: React.RefObject<HTMLElement | null>,
+  setup: (ctx: gsap.Context) => void
+): CleanupFn {
+  const ctx = gsap.context(() => {
+    if (scope.current) setup(ctx as unknown as gsap.Context)
+  }, scope)
+  return () => ctx.revert()
 }

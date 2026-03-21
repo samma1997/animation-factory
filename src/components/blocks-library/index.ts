@@ -1,110 +1,189 @@
-/**
- * Animation Factory — Block Catalog
- * Central registry of all available blocks with metadata for the admin UI.
- */
+// ────────────────────────────────────────────────────────
+// Block Library — ABTG Landing Page Factory
+// ────────────────────────────────────────────────────────
 
-export { HeroCenter } from "./HeroCenter";
-export type { HeroCenterProps } from "./HeroCenter";
-export { heroCenterPreviewProps } from "./HeroCenter";
+export { HeroSplit } from './HeroSplit'
+export { HeroCenter } from './HeroCenter'
+export { LogoTicker } from './LogoTicker'
+export { ChecklistSection } from './ChecklistSection'
+export { ComparisonTable } from './ComparisonTable'
+export { NumberedPhases } from './NumberedPhases'
+export { PillarCards } from './PillarCards'
+export { SpeakerCards } from './SpeakerCards'
+export { UrgencySection } from './UrgencySection'
+export { FormSection } from './FormSection'
+export { CTADivider } from './CTADivider'
+export { FooterABTG } from './FooterABTG'
+export { HorizontalScrollCards } from './HorizontalScrollCards'
+export { StackingCards } from './StackingCards'
 
-export { PillarCards } from "./PillarCards";
-export type { PillarCardsProps, PillarCard } from "./PillarCards";
-export { pillarCardsPreviewProps } from "./PillarCards";
+// Re-export types
+export type { HeroSplitProps, HeroSplitFormField } from './HeroSplit'
+export type { HeroCenterProps } from './HeroCenter'
+export type { LogoTickerProps } from './LogoTicker'
+export type { ChecklistSectionProps, ChecklistItem } from './ChecklistSection'
+export type { ComparisonTableProps, ComparisonRow } from './ComparisonTable'
+export type { NumberedPhasesProps, Phase } from './NumberedPhases'
+export type { PillarCardsProps, PillarCard } from './PillarCards'
+export type { SpeakerCardsProps, Speaker } from './SpeakerCards'
+export type { UrgencySectionProps } from './UrgencySection'
+export type { FormSectionProps, FormField, EventDetail } from './FormSection'
+export type { CTADividerProps } from './CTADivider'
+export type { FooterABTGProps, FooterLink } from './FooterABTG'
+export type { HorizontalScrollCardsProps, HorizontalScrollCard } from './HorizontalScrollCards'
+export type { StackingCardsProps, StackingCard } from './StackingCards'
 
-export { CTADivider } from "./CTADivider";
-export type { CTADividerProps } from "./CTADivider";
-export { ctaDividerPreviewProps } from "./CTADivider";
+// ────────────────────────────────────────────────────────
+// Block Catalog — used by page builder / factory system
+// ────────────────────────────────────────────────────────
 
-export { ChecklistSection } from "./ChecklistSection";
-export type { ChecklistSectionProps } from "./ChecklistSection";
-export { checklistSectionPreviewProps } from "./ChecklistSection";
+import { HeroSplit } from './HeroSplit'
+import { HeroCenter } from './HeroCenter'
+import { LogoTicker } from './LogoTicker'
+import { ChecklistSection } from './ChecklistSection'
+import { ComparisonTable } from './ComparisonTable'
+import { NumberedPhases } from './NumberedPhases'
+import { PillarCards } from './PillarCards'
+import { SpeakerCards } from './SpeakerCards'
+import { UrgencySection } from './UrgencySection'
+import { FormSection } from './FormSection'
+import { CTADivider } from './CTADivider'
+import { FooterABTG } from './FooterABTG'
+import { HorizontalScrollCards } from './HorizontalScrollCards'
+import { StackingCards } from './StackingCards'
 
-export { FooterMinimal } from "./FooterMinimal";
-export type { FooterMinimalProps, FooterLink } from "./FooterMinimal";
-export { footerMinimalPreviewProps } from "./FooterMinimal";
-
-// ─── Block Catalog Entry Type ──────────────────────────────────────────────────
+export type BlockCategory = 'hero' | 'social-proof' | 'content' | 'conversion' | 'layout' | 'animation'
 
 export interface BlockCatalogEntry {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  /** List of key prop names shown in the admin card */
-  previewProps: string[];
-  /** Component identifier for dynamic rendering */
-  componentKey: string;
+  id: string
+  name: string
+  category: BlockCategory
+  component: React.ComponentType<Record<string, unknown>>
+  description: string
+  previewProps?: Record<string, unknown>
 }
-
-// ─── Block Catalog ─────────────────────────────────────────────────────────────
 
 export const BLOCK_CATALOG: BlockCatalogEntry[] = [
   {
-    id: "hero-center",
-    name: "HeroCenter",
-    category: "Hero",
+    id: 'hero-split',
+    name: 'Hero Split',
+    category: 'hero',
+    component: HeroSplit as unknown as React.ComponentType<Record<string, unknown>>,
     description:
-      "Hero centrato con eyebrow, titolo, sottotitolo e CTA. Supporta varianti di sfondo gradient, solid e mesh. Animato con GSAP timeline.",
-    previewProps: ["eyebrow", "title", "subtitle", "ctaLabel", "backgroundStyle", "animated"],
-    componentKey: "HeroCenter",
+      'Hero a due colonne: testo e value proposition a sinistra, form di registrazione a destra. Background scuro con immagine opzionale.',
   },
   {
-    id: "pillar-cards",
-    name: "PillarCards",
-    category: "Feature",
+    id: 'hero-center',
+    name: 'Hero Centrato',
+    category: 'hero',
+    component: HeroCenter as unknown as React.ComponentType<Record<string, unknown>>,
     description:
-      "Griglia di card con icona, titolo e descrizione. Supporta 2, 3 o 4 colonne. Animazione scroll stagger su ogni card.",
-    previewProps: ["eyebrow", "title", "cards[]", "columns", "animated"],
-    componentKey: "PillarCards",
+      'Hero centrato full-width con titolo grande, sottotitolo e CTA primaria. Ideale per landing con immagine di sfondo forte.',
   },
   {
-    id: "cta-divider",
-    name: "CTADivider",
-    category: "CTA",
+    id: 'logo-ticker',
+    name: 'Logo Ticker',
+    category: 'social-proof',
+    component: LogoTicker as unknown as React.ComponentType<Record<string, unknown>>,
     description:
-      "Sezione divisore con titolo, sottotitolo e CTA. Varianti brand (gradiente blu), dark (sfondo scuro) e light.",
-    previewProps: ["title", "subtitle", "ctaLabel", "variant", "animated"],
-    componentKey: "CTADivider",
+      'Barra con scorrimento infinito di loghi media/partner. Aggiunge social proof immediata sotto l\'hero.',
   },
   {
-    id: "checklist-section",
-    name: "ChecklistSection",
-    category: "Contenuto",
+    id: 'checklist-section',
+    name: 'Checklist',
+    category: 'content',
+    component: ChecklistSection as unknown as React.ComponentType<Record<string, unknown>>,
     description:
-      "Griglia di checklist con checkmark SVG colorati. Supporta 1, 2 o 3 colonne. Animazione scroll slide-in per ogni voce.",
-    previewProps: ["title", "items[]", "columns", "checkColor", "animated"],
-    componentKey: "ChecklistSection",
+      'Griglia di elementi con checkmark (1-4 colonne). Perfetta per elencare benefici, feature o cosa si impara.',
   },
   {
-    id: "footer-minimal",
-    name: "FooterMinimal",
-    category: "Footer",
+    id: 'comparison-table',
+    name: 'Tabella Confronto',
+    category: 'content',
+    component: ComparisonTable as unknown as React.ComponentType<Record<string, unknown>>,
     description:
-      "Footer minimale con brand, tagline, link di navigazione e copyright. Varianti light e dark.",
-    previewProps: ["brand", "tagline", "links[]", "copyright", "variant"],
-    componentKey: "FooterMinimal",
+      'Tabella Prima/Dopo con styling rosso/verde. Evidenzia la trasformazione del partecipante.',
   },
-];
+  {
+    id: 'numbered-phases',
+    name: 'Fasi Numerate',
+    category: 'content',
+    component: NumberedPhases as unknown as React.ComponentType<Record<string, unknown>>,
+    description:
+      'Card numerate (1, 2, 3...) con connettore tra le fasi. Ideale per programma evento, step di un percorso.',
+  },
+  {
+    id: 'pillar-cards',
+    name: 'Card Pilastri',
+    category: 'content',
+    component: PillarCards as unknown as React.ComponentType<Record<string, unknown>>,
+    description:
+      'Griglia di card con icona, titolo e descrizione. Per feature principali, pilastri del corso, argomenti trattati.',
+  },
+  {
+    id: 'speaker-cards',
+    name: 'Card Speaker',
+    category: 'content',
+    component: SpeakerCards as unknown as React.ComponentType<Record<string, unknown>>,
+    description:
+      'Card speaker/coach con foto, nome, ruolo e bullet credenziali. Layout adattivo per 1-3 speaker.',
+  },
+  {
+    id: 'urgency-section',
+    name: 'Sezione Urgenza',
+    category: 'conversion',
+    component: UrgencySection as unknown as React.ComponentType<Record<string, unknown>>,
+    description:
+      'Sezione urgenza con sfondo scuro o arancione. Testo forte con icona, bullet e CTA per spingere all\'azione.',
+  },
+  {
+    id: 'form-section',
+    name: 'Sezione Form',
+    category: 'conversion',
+    component: FormSection as unknown as React.ComponentType<Record<string, unknown>>,
+    description:
+      'Sezione con dettagli evento a sinistra e form di registrazione a destra. Include box requisiti e bonus badge.',
+  },
+  {
+    id: 'cta-divider',
+    name: 'CTA Divider',
+    category: 'layout',
+    component: CTADivider as unknown as React.ComponentType<Record<string, unknown>>,
+    description:
+      'Divisore con CTA singolo tra sezioni. Disponibile in variante arancione, verde o scuro.',
+  },
+  {
+    id: 'horizontal-scroll-cards',
+    name: 'Horizontal Scroll Cards',
+    category: 'animation',
+    component: HorizontalScrollCards as unknown as React.ComponentType<Record<string, unknown>>,
+    description:
+      'Sezione con card grandi che scorrono orizzontalmente con pin ScrollTrigger. Supporta card con stat, citazioni e contenuti. Su mobile le card si impilano verticalmente.',
+  },
+  {
+    id: 'stacking-cards',
+    name: 'Stacking Cards',
+    category: 'animation',
+    component: StackingCards as unknown as React.ComponentType<Record<string, unknown>>,
+    description:
+      'Card che salgono dal basso con effetto ventaglio durante lo scroll. Sezione sticky con pin GSAP ScrollTrigger, ideale per step di processo o fasi di un percorso.',
+  },
+  {
+    id: 'footer-abtg',
+    name: 'Footer ABTG',
+    category: 'layout',
+    component: FooterABTG as unknown as React.ComponentType<Record<string, unknown>>,
+    description:
+      'Footer standard ABTG con logo, link legali, disclaimer e copyright. Sfondo scuro.',
+  },
+]
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────
-
-/**
- * Find a block catalog entry by its ID.
- */
+/** Lookup a block component by its catalog ID */
 export function getBlockById(id: string): BlockCatalogEntry | undefined {
-  return BLOCK_CATALOG.find((b) => b.id === id);
+  return BLOCK_CATALOG.find((b) => b.id === id)
 }
 
-/**
- * Get all blocks belonging to a specific category.
- */
-export function getBlocksByCategory(category: string): BlockCatalogEntry[] {
-  return BLOCK_CATALOG.filter((b) => b.category === category);
-}
-
-/**
- * Get all unique block categories.
- */
-export function getAllBlockCategories(): string[] {
-  return Array.from(new Set(BLOCK_CATALOG.map((b) => b.category)));
+/** Get all blocks in a specific category */
+export function getBlocksByCategory(category: BlockCategory): BlockCatalogEntry[] {
+  return BLOCK_CATALOG.filter((b) => b.category === category)
 }

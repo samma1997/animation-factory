@@ -1,58 +1,31 @@
-"use client";
+'use client'
 
-import { useEffect, useRef } from "react";
-import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect } from 'react'
+import Lenis from 'lenis'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-/**
- * SmoothScrollProvider
- *
- * Wraps children with Lenis smooth scrolling synced to GSAP ScrollTrigger.
- * Place this as high as possible in the component tree (typically in layout.tsx).
- *
- * Usage:
- *   <SmoothScrollProvider>
- *     {children}
- *   </SmoothScrollProvider>
- */
-export function SmoothScrollProvider({
-  children,
-  options,
-}: {
-  children: React.ReactNode;
-  options?: ConstructorParameters<typeof Lenis>[0];
-}) {
-  const lenisRef = useRef<Lenis | null>(null);
+gsap.registerPlugin(ScrollTrigger)
 
+export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
     const lenis = new Lenis({
-      lerp: 0.1,
-      smoothWheel: true,
-      ...options,
-    });
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      touchMultiplier: 2,
+    })
 
-    lenisRef.current = lenis;
+    lenis.on('scroll', ScrollTrigger.update)
 
-    // Sync Lenis scroll position with GSAP ScrollTrigger
-    lenis.on("scroll", ScrollTrigger.update);
-
-    // Tick function — drives Lenis on every GSAP frame
-    const ticker = gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-
-    // Prevent GSAP from using its own lag smoothing (Lenis handles this)
-    gsap.ticker.lagSmoothing(0);
+    const rafCallback = (time: number) => lenis.raf(time * 1000)
+    gsap.ticker.add(rafCallback)
+    gsap.ticker.lagSmoothing(0)
 
     return () => {
-      gsap.ticker.remove(ticker);
-      lenis.destroy();
-      lenisRef.current = null;
-    };
-  }, [options]);
+      lenis.destroy()
+      gsap.ticker.remove(rafCallback)
+    }
+  }, [])
 
-  return <>{children}</>;
+  return <>{children}</>
 }

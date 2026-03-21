@@ -1,108 +1,101 @@
-"use client";
+'use client'
 
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { registerGSAP } from "@/lib/animations";
+import { useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
+import { ArrowRight } from 'lucide-react'
+
+gsap.registerPlugin(ScrollTrigger)
+
+// ── Types ──────────────────────────────────────────────
 
 export interface CTADividerProps {
-  title: string;
-  subtitle?: string;
-  ctaLabel: string;
-  ctaHref?: string;
-  variant?: "brand" | "dark" | "light";
-  animated?: boolean;
+  text?: string
+  ctaText: string
+  ctaHref?: string
+  variant?: 'orange' | 'green' | 'dark'
+  size?: 'sm' | 'md' | 'lg'
+  id?: string
 }
 
-export const ctaDividerPreviewProps: CTADividerProps = {
-  title: "Pronto a costruire il tuo prossimo sito animato?",
-  subtitle: "Inizia oggi con Animation Factory e consegna esperienze web premium.",
-  ctaLabel: "Comincia gratis",
-  ctaHref: "#",
-  variant: "brand",
-  animated: true,
-};
+// ── Component ──────────────────────────────────────────
 
 export function CTADivider({
-  title,
-  subtitle,
-  ctaLabel,
-  ctaHref = "#",
-  variant = "brand",
-  animated = true,
+  text,
+  ctaText,
+  ctaHref = '#form',
+  variant = 'orange',
+  size = 'md',
+  id,
 }: CTADividerProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null)
 
-  useEffect(() => {
-    if (!animated || !containerRef.current) return;
-    registerGSAP();
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return
 
-    const ctx = gsap.context(() => {
-      gsap.from(containerRef.current!.children, {
-        opacity: 0,
-        y: 30,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-      });
-    }, containerRef);
+      const inner = sectionRef.current.querySelector('.cta-inner')
+      if (inner) {
+        gsap.from(inner, {
+          y: 25,
+          opacity: 0,
+          duration: 0.6,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 85%' },
+        })
+      }
 
-    return () => ctx.revert();
-  }, [animated]);
-
-  const styles: Record<string, React.CSSProperties> = {
-    brand: {
-      background:
-        "linear-gradient(135deg, var(--color-brand-dark) 0%, var(--color-brand) 100%)",
-      color: "white",
+      // Button scale pulse
+      const btn = sectionRef.current.querySelector('.cta-btn')
+      if (btn) {
+        gsap.from(btn, {
+          scale: 0.9,
+          opacity: 0,
+          duration: 0.5,
+          delay: 0.2,
+          ease: 'back.out(1.5)',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 85%' },
+        })
+      }
     },
-    dark: {
-      backgroundColor: "var(--color-surface-dark)",
-      color: "var(--color-text-inverted)",
-    },
-    light: {
-      backgroundColor: "var(--color-surface)",
-      color: "var(--color-text)",
-    },
-  };
+    { scope: sectionRef }
+  )
 
-  const ctaStyles: Record<string, React.CSSProperties> = {
-    brand: { backgroundColor: "white", color: "var(--color-brand-dark)" },
-    dark: { backgroundColor: "var(--color-brand)", color: "white" },
-    light: { backgroundColor: "var(--color-brand)", color: "white" },
-  };
+  const bgClasses: Record<string, string> = {
+    orange: 'bg-gradient-to-r from-[#EF7B11] to-[#E57712]',
+    green: 'bg-gradient-to-r from-[#22c55e] to-[#16a34a]',
+    dark: 'bg-[#1e293b]',
+  }
+
+  const btnClasses: Record<string, string> = {
+    orange: 'bg-white hover:bg-gray-100 text-[#EF7B11]',
+    green: 'bg-white hover:bg-gray-100 text-[#22c55e]',
+    dark: 'bg-[#22c55e] hover:bg-[#16a34a] text-white',
+  }
+
+  const padClasses: Record<string, string> = {
+    sm: 'py-8',
+    md: 'py-12',
+    lg: 'py-16',
+  }
 
   return (
-    <section style={{ ...styles[variant], padding: "80px 24px" }}>
-      <div ref={containerRef} className="max-w-3xl mx-auto text-center">
-        <h2
-          className="text-3xl md:text-4xl font-semibold tracking-tight mb-4"
-          style={{ fontFamily: "var(--font-heading)" }}
-        >
-          {title}
-        </h2>
-
-        {subtitle && (
-          <p
-            className="text-lg mb-8 leading-relaxed opacity-80"
-            style={{ maxWidth: "600px", margin: "0 auto 2rem" }}
+    <section ref={sectionRef} id={id} className={`${bgClasses[variant]} ${padClasses[size]}`}>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="cta-inner">
+          {text && (
+            <p className="text-white font-semibold text-lg sm:text-xl mb-5">{text}</p>
+          )}
+          <a
+            href={ctaHref}
+            className={`cta-btn inline-flex items-center gap-2 font-bold text-lg px-8 py-4 rounded-xl transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] shadow-lg ${btnClasses[variant]}`}
           >
-            {subtitle}
-          </p>
-        )}
-
-        <a
-          href={ctaHref}
-          className="inline-flex items-center px-8 py-4 rounded-lg font-semibold text-base transition-opacity hover:opacity-90"
-          style={ctaStyles[variant]}
-        >
-          {ctaLabel}
-        </a>
+            {ctaText}
+            <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
       </div>
     </section>
-  );
+  )
 }

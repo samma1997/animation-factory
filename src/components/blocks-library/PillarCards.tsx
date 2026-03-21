@@ -1,159 +1,180 @@
-"use client";
+'use client'
 
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { registerGSAP } from "@/lib/animations";
+import { useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
+import {
+  TrendingUp,
+  PiggyBank,
+  BarChart3,
+  Building2,
+  Wallet,
+  Target,
+  type LucideIcon,
+} from 'lucide-react'
+
+gsap.registerPlugin(ScrollTrigger)
+
+// ── Types ──────────────────────────────────────────────
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  'trending-up': TrendingUp,
+  'piggy-bank': PiggyBank,
+  'bar-chart': BarChart3,
+  building: Building2,
+  wallet: Wallet,
+  target: Target,
+}
 
 export interface PillarCard {
-  icon: string;
-  title: string;
-  description: string;
+  icon?: string | React.ReactNode
+  title: string
+  description: string
+  highlight?: string
 }
 
 export interface PillarCardsProps {
-  eyebrow?: string;
-  title?: string;
-  subtitle?: string;
-  cards: PillarCard[];
-  columns?: 2 | 3 | 4;
-  animated?: boolean;
+  preTitle?: string
+  title: string
+  titleHighlight?: string
+  subtitle?: string
+  cards: PillarCard[]
+  columns?: 2 | 3 | 4
+  bgColor?: 'white' | 'light' | 'dark'
+  id?: string
 }
 
-export const pillarCardsPreviewProps: PillarCardsProps = {
-  eyebrow: "Funzionalità",
-  title: "Tutto ciò di cui hai bisogno",
-  subtitle: "Blocchi riutilizzabili, animazioni GSAP e un sistema di design basato su CSS variables.",
-  columns: 3,
-  animated: true,
-  cards: [
-    {
-      icon: "⚡",
-      title: "Animazioni GSAP",
-      description: "Animazioni performanti e fluide con GSAP ScrollTrigger, pronte all'uso in ogni blocco.",
-    },
-    {
-      icon: "🎨",
-      title: "Brand Tokens",
-      description: "Sistema di colori basato su CSS variables. Cambia brand modificando un solo file.",
-    },
-    {
-      icon: "📦",
-      title: "Blocchi Riutilizzabili",
-      description: "Catalogo di blocchi UI componibili, ognuno con props tipizzate e preview admin.",
-    },
-  ],
-};
+// ── Component ──────────────────────────────────────────
 
 export function PillarCards({
-  eyebrow,
+  preTitle,
   title,
+  titleHighlight,
   subtitle,
   cards,
   columns = 3,
-  animated = true,
+  bgColor = 'white',
+  id,
 }: PillarCardsProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null)
 
-  useEffect(() => {
-    if (!animated || !cardsRef.current) return;
-    registerGSAP();
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return
 
-    const ctx = gsap.context(() => {
-      const cardEls = cardsRef.current!.querySelectorAll(".pillar-card");
-      gsap.from(cardEls, {
-        opacity: 0,
-        y: 40,
-        stagger: 0.12,
-        duration: 0.7,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: cardsRef.current,
-          start: "top 82%",
-          toggleActions: "play none none none",
-        },
-      });
-    }, containerRef);
+      // Heading
+      const heading = sectionRef.current.querySelector('.pc-heading')
+      if (heading) {
+        gsap.from(heading, {
+          y: 30,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: heading, start: 'top 85%' },
+        })
+      }
 
-    return () => ctx.revert();
-  }, [animated]);
+      // Cards stagger
+      const cardEls = sectionRef.current.querySelectorAll('.pc-card')
+      if (cardEls.length) {
+        gsap.set(cardEls, { opacity: 0, y: 40 })
+        gsap.to(cardEls, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current.querySelector('.pc-grid'),
+            start: 'top 80%',
+          },
+        })
+      }
+    },
+    { scope: sectionRef }
+  )
 
-  const colClass: Record<number, string> = {
-    2: "grid-cols-1 sm:grid-cols-2",
-    3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
-    4: "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4",
-  };
+  const bgClasses: Record<string, string> = {
+    white: 'bg-white',
+    light: 'bg-[#F5F5F7]',
+    dark: 'bg-[#1e293b]',
+  }
+  const isDark = bgColor === 'dark'
+
+  const colsClass: Record<number, string> = {
+    2: 'grid-cols-1 sm:grid-cols-2',
+    3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+    4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
+  }
+
+  const renderIcon = (icon: string | React.ReactNode | undefined) => {
+    if (!icon) return <Target className="w-6 h-6" />
+    if (typeof icon === 'string') {
+      const IconComp = ICON_MAP[icon]
+      return IconComp ? <IconComp className="w-6 h-6" /> : <Target className="w-6 h-6" />
+    }
+    return icon
+  }
 
   return (
-    <section
-      ref={containerRef}
-      className="py-20 px-6"
-      style={{ backgroundColor: "var(--color-bg-alt)" }}
-    >
-      <div className="max-w-5xl mx-auto">
-        {(eyebrow || title || subtitle) && (
-          <div className="text-center mb-12">
-            {eyebrow && (
-              <span
-                className="inline-block mb-3 text-xs font-semibold uppercase tracking-widest"
-                style={{ color: "var(--color-brand)" }}
-              >
-                {eyebrow}
-              </span>
-            )}
-            {title && (
-              <h2
-                className="text-3xl md:text-4xl font-semibold tracking-tight mb-4"
-                style={{ fontFamily: "var(--font-heading)", color: "var(--color-text)" }}
-              >
-                {title}
-              </h2>
-            )}
-            {subtitle && (
-              <p
-                className="text-lg max-w-2xl mx-auto leading-relaxed"
-                style={{ color: "var(--color-text-secondary)" }}
-              >
-                {subtitle}
-              </p>
-            )}
-          </div>
-        )}
+    <section ref={sectionRef} id={id} className={`${bgClasses[bgColor]} py-16 sm:py-20 lg:py-24`}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Heading */}
+        <div className="pc-heading text-center mb-14">
+          {preTitle && (
+            <p className="text-[#EF7B11] font-semibold text-sm uppercase tracking-wider mb-3">
+              {preTitle}
+            </p>
+          )}
+          <h2
+            className={`text-3xl sm:text-4xl lg:text-5xl font-black mb-4 ${
+              isDark ? 'text-white' : 'text-[#1e293b]'
+            }`}
+          >
+            {title}
+            {titleHighlight && <span className="text-[#EF7B11]"> {titleHighlight}</span>}
+          </h2>
+          {subtitle && (
+            <p className={`text-lg max-w-2xl mx-auto ${isDark ? 'text-white/60' : 'text-[#67768e]'}`}>
+              {subtitle}
+            </p>
+          )}
+        </div>
 
-        <div ref={cardsRef} className={`grid gap-6 ${colClass[columns]}`}>
+        {/* Cards */}
+        <div className={`pc-grid grid ${colsClass[columns]} gap-6`}>
           {cards.map((card, i) => (
             <div
               key={i}
-              className="pillar-card rounded-xl p-6 flex flex-col gap-4 hover:shadow-md transition-shadow duration-200"
-              style={{
-                backgroundColor: "var(--color-bg)",
-                border: "1px solid var(--color-border)",
-              }}
+              className={`pc-card group rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1 ${
+                isDark
+                  ? 'bg-white/5 border border-white/10 hover:border-[#EF7B11]/30'
+                  : 'bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:border-[#EF7B11]/20'
+              }`}
             >
-              <div
-                className="w-11 h-11 rounded-lg flex items-center justify-center text-xl"
-                style={{ backgroundColor: "var(--color-surface)" }}
+              {/* Icon */}
+              <div className="w-12 h-12 rounded-xl bg-[#EF7B11]/10 text-[#EF7B11] flex items-center justify-center mb-5 group-hover:bg-[#EF7B11] group-hover:text-white transition-colors duration-300">
+                {renderIcon(card.icon)}
+              </div>
+
+              <h3
+                className={`text-lg font-bold mb-2 ${isDark ? 'text-white' : 'text-[#1e293b]'}`}
               >
-                {card.icon}
-              </div>
-              <div>
-                <h3
-                  className="text-base font-semibold mb-1.5"
-                  style={{ color: "var(--color-text)" }}
-                >
-                  {card.title}
-                </h3>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: "var(--color-text-secondary)" }}
-                >
-                  {card.description}
-                </p>
-              </div>
+                {card.title}
+              </h3>
+
+              {card.highlight && (
+                <p className="text-[#EF7B11] font-semibold text-sm mb-2">{card.highlight}</p>
+              )}
+
+              <p className={`text-sm leading-relaxed ${isDark ? 'text-white/60' : 'text-[#67768e]'}`}>
+                {card.description}
+              </p>
             </div>
           ))}
         </div>
       </div>
     </section>
-  );
+  )
 }

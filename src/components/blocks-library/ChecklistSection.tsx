@@ -1,151 +1,147 @@
-"use client";
+'use client'
 
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { registerGSAP } from "@/lib/animations";
+import { useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
+import { Check } from 'lucide-react'
 
-export interface ChecklistSectionProps {
-  eyebrow?: string;
-  title: string;
-  subtitle?: string;
-  items: string[];
-  columns?: 1 | 2 | 3;
-  checkColor?: "brand" | "success" | "accent";
-  animated?: boolean;
+gsap.registerPlugin(ScrollTrigger)
+
+// ── Types ──────────────────────────────────────────────
+
+export interface ChecklistItem {
+  text: string
+  bold?: string
 }
 
-export const checklistSectionPreviewProps: ChecklistSectionProps = {
-  eyebrow: "Perché sceglierci",
-  title: "Tutto incluso, zero compromessi",
-  subtitle: "Ogni blocco include animazioni, tipografia, responsiveness e supporto per brand token.",
-  columns: 2,
-  checkColor: "brand",
-  animated: true,
-  items: [
-    "Animazioni GSAP incluse in ogni blocco",
-    "CSS variables per brand switching rapido",
-    "TypeScript strict su tutti i componenti",
-    "Mobile-first e fully responsive",
-    "Ottimizzazione Core Web Vitals",
-    "Admin dashboard integrato",
-    "Sistema di pagine registrabili",
-    "Smooth scroll con Lenis + GSAP",
-  ],
-};
+export interface ChecklistSectionProps {
+  preTitle?: string
+  title: string
+  titleHighlight?: string
+  subtitle?: string
+  items: ChecklistItem[]
+  columns?: 1 | 2 | 3 | 4
+  bgColor?: 'white' | 'light' | 'dark'
+  checkColor?: 'orange' | 'green'
+  id?: string
+}
+
+// ── Component ──────────────────────────────────────────
 
 export function ChecklistSection({
-  eyebrow,
+  preTitle,
   title,
+  titleHighlight,
   subtitle,
   items,
   columns = 2,
-  checkColor = "brand",
-  animated = true,
+  bgColor = 'white',
+  checkColor = 'green',
+  id,
 }: ChecklistSectionProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
+  const sectionRef = useRef<HTMLElement>(null)
 
-  useEffect(() => {
-    if (!animated || !listRef.current) return;
-    registerGSAP();
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return
 
-    const ctx = gsap.context(() => {
-      const items = listRef.current!.querySelectorAll(".checklist-item");
-      gsap.from(items, {
-        opacity: 0,
-        x: -20,
-        stagger: 0.08,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: listRef.current,
-          start: "top 82%",
-          toggleActions: "play none none none",
-        },
-      });
-    }, containerRef);
+      // Title
+      const heading = sectionRef.current.querySelector('.cl-heading')
+      if (heading) {
+        gsap.from(heading, {
+          y: 30,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: heading, start: 'top 85%' },
+        })
+      }
 
-    return () => ctx.revert();
-  }, [animated]);
+      // Items stagger
+      const listItems = sectionRef.current.querySelectorAll('.cl-item')
+      if (listItems.length) {
+        gsap.set(listItems, { opacity: 0, x: -20 })
+        gsap.to(listItems, {
+          opacity: 1,
+          x: 0,
+          duration: 0.5,
+          stagger: 0.07,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current.querySelector('.cl-grid'),
+            start: 'top 80%',
+          },
+        })
+      }
+    },
+    { scope: sectionRef }
+  )
 
-  const checkColors: Record<string, string> = {
-    brand: "var(--color-brand)",
-    success: "var(--color-success)",
-    accent: "var(--color-accent)",
-  };
+  const bgClasses: Record<string, string> = {
+    white: 'bg-white',
+    light: 'bg-[#F5F5F7]',
+    dark: 'bg-[#1e293b]',
+  }
+  const textClasses: Record<string, { title: string; text: string; sub: string }> = {
+    white: { title: 'text-[#1e293b]', text: 'text-[#1e293b]/80', sub: 'text-[#67768e]' },
+    light: { title: 'text-[#1e293b]', text: 'text-[#1e293b]/80', sub: 'text-[#67768e]' },
+    dark: { title: 'text-white', text: 'text-white/80', sub: 'text-white/50' },
+  }
+  const colors = textClasses[bgColor]
 
-  const colClass: Record<number, string> = {
-    1: "grid-cols-1",
-    2: "grid-cols-1 sm:grid-cols-2",
-    3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
-  };
+  const colsClass: Record<number, string> = {
+    1: 'grid-cols-1',
+    2: 'grid-cols-1 sm:grid-cols-2',
+    3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+    4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
+  }
+
+  const checkBg = checkColor === 'orange' ? 'bg-[#EF7B11]/15 text-[#EF7B11]' : 'bg-[#22c55e]/15 text-[#22c55e]'
 
   return (
     <section
-      ref={containerRef}
-      className="py-20 px-6"
-      style={{ backgroundColor: "var(--color-bg)" }}
+      ref={sectionRef}
+      id={id}
+      className={`${bgClasses[bgColor]} py-16 sm:py-20 lg:py-24`}
     >
-      <div className="max-w-4xl mx-auto">
-        {(eyebrow || title || subtitle) && (
-          <div className="mb-10">
-            {eyebrow && (
-              <span
-                className="inline-block mb-3 text-xs font-semibold uppercase tracking-widest"
-                style={{ color: "var(--color-brand)" }}
-              >
-                {eyebrow}
-              </span>
-            )}
-            {title && (
-              <h2
-                className="text-3xl md:text-4xl font-semibold tracking-tight mb-4"
-                style={{ fontFamily: "var(--font-heading)", color: "var(--color-text)" }}
-              >
-                {title}
-              </h2>
-            )}
-            {subtitle && (
-              <p
-                className="text-lg leading-relaxed max-w-2xl"
-                style={{ color: "var(--color-text-secondary)" }}
-              >
-                {subtitle}
-              </p>
-            )}
-          </div>
-        )}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="cl-heading text-center mb-12">
+          {preTitle && (
+            <p className="text-[#EF7B11] font-semibold text-sm uppercase tracking-wider mb-3">
+              {preTitle}
+            </p>
+          )}
+          <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-black ${colors.title} mb-4`}>
+            {title}
+            {titleHighlight && <span className="text-[#EF7B11]"> {titleHighlight}</span>}
+          </h2>
+          {subtitle && (
+            <p className={`text-lg ${colors.sub} max-w-2xl mx-auto`}>{subtitle}</p>
+          )}
+        </div>
 
-        <ul ref={listRef} className={`grid gap-x-8 gap-y-4 ${colClass[columns]}`}>
+        {/* Grid */}
+        <div className={`cl-grid grid ${colsClass[columns]} gap-4`}>
           {items.map((item, i) => (
-            <li key={i} className="checklist-item flex items-start gap-3">
-              <svg
-                className="flex-shrink-0 mt-0.5"
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="9" cy="9" r="9" fill={checkColors[checkColor]} fillOpacity="0.12" />
-                <path
-                  d="M5.5 9L7.5 11L12.5 6.5"
-                  stroke={checkColors[checkColor]}
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span
-                className="text-sm leading-relaxed"
-                style={{ color: "var(--color-text-secondary)" }}
-              >
-                {item}
+            <div
+              key={i}
+              className={`cl-item flex items-start gap-3 p-4 rounded-xl ${
+                bgColor === 'dark' ? 'bg-white/5' : 'bg-[#F5F5F7]'
+              }`}
+            >
+              <span className={`flex-shrink-0 w-7 h-7 rounded-full ${checkBg} flex items-center justify-center mt-0.5`}>
+                <Check className="w-4 h-4" />
               </span>
-            </li>
+              <p className={`${colors.text} text-[15px] leading-relaxed`}>
+                {item.bold && <strong className={colors.title}>{item.bold} </strong>}
+                {item.text}
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
-  );
+  )
 }

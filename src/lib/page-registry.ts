@@ -1,84 +1,131 @@
-/**
- * Animation Factory — Page Registry
- * Types and helpers for managing the page/block registry system.
- */
+// ============================================================
+// PAGE REGISTRY — TypeScript types and helpers
+// ============================================================
 
-import registryData from "@/content/pages/registry.json";
+export type PageStatus = 'draft' | 'live' | 'archived'
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+export type PageCategory =
+  | 'immobiliare'
+  | 'trading'
+  | 'wake-up-call'
+  | 'webinar'
+  | 'corso'
+  | 'lead-magnet'
+  | 'thank-you'
+  | 'evento'
 
-export type PageStatus = "live" | "bozza" | "archiviata";
-
-export interface BlockInstance {
-  /** ID matching a BlockCatalogEntry */
-  blockId: string;
-  /** Render order (ascending) */
-  order: number;
-  /** Serialized props passed to the block component */
-  props: Record<string, unknown>;
+export interface PageMetrics {
+  views?: number
+  conversions?: number
+  conversionRate?: number
 }
 
-export interface RegisteredPage {
-  id: string;
-  name: string;
-  /** URL-friendly slug */
-  slug: string;
-  /** Deployed route */
-  route: string;
-  status: PageStatus;
-  category: string;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-  blocks: BlockInstance[];
+export interface PageRegistryEntry {
+  id: string
+  slug: string
+  name: string
+  status: PageStatus
+  category: PageCategory
+  template: string
+  createdAt: string
+  updatedAt: string
+  deployedAt?: string
+  route: string
+  routeType: 'hardcoded' | 'dynamic'
+  blocks: number
+  hasForm: boolean
+  hasPricing: boolean
+  metrics?: PageMetrics
+  thumbnail?: string
+  notes?: string
 }
 
-// ─── Loaded Registry ──────────────────────────────────────────────────────────
-
-export const PAGE_REGISTRY: RegisteredPage[] = registryData as RegisteredPage[];
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-/**
- * Find a registered page by its ID.
- */
-export function getPageById(id: string): RegisteredPage | undefined {
-  return PAGE_REGISTRY.find((p) => p.id === id);
+export interface PageRegistry {
+  version: string
+  lastUpdated: string
+  pages: PageRegistryEntry[]
 }
 
-/**
- * Find a registered page by its slug.
- */
-export function getPageBySlug(slug: string): RegisteredPage | undefined {
-  return PAGE_REGISTRY.find((p) => p.slug === slug);
+// ---- Category display config ----
+
+export const CATEGORY_CONFIG: Record<PageCategory, { label: string; color: string; bgColor: string }> = {
+  immobiliare: { label: 'Immobiliare', color: 'text-orange-400', bgColor: 'bg-orange-400/10' },
+  trading: { label: 'Trading', color: 'text-blue-400', bgColor: 'bg-blue-400/10' },
+  'wake-up-call': { label: 'Wake Up Call', color: 'text-purple-400', bgColor: 'bg-purple-400/10' },
+  webinar: { label: 'Webinar', color: 'text-cyan-400', bgColor: 'bg-cyan-400/10' },
+  corso: { label: 'Corso', color: 'text-emerald-400', bgColor: 'bg-emerald-400/10' },
+  'lead-magnet': { label: 'Lead Magnet', color: 'text-pink-400', bgColor: 'bg-pink-400/10' },
+  'thank-you': { label: 'Thank You', color: 'text-gray-400', bgColor: 'bg-gray-400/10' },
+  evento: { label: 'Evento', color: 'text-yellow-400', bgColor: 'bg-yellow-400/10' },
 }
 
-/**
- * Get all pages with a specific status.
- */
-export function getPagesByStatus(status: PageStatus): RegisteredPage[] {
-  return PAGE_REGISTRY.filter((p) => p.status === status);
+export const STATUS_CONFIG: Record<PageStatus, { label: string; color: string; bgColor: string; dotColor: string }> = {
+  draft: { label: 'Bozza', color: 'text-gray-400', bgColor: 'bg-gray-400/10', dotColor: 'bg-gray-400' },
+  live: { label: 'Live', color: 'text-emerald-400', bgColor: 'bg-emerald-400/10', dotColor: 'bg-emerald-400' },
+  archived: { label: 'Archiviata', color: 'text-red-400', bgColor: 'bg-red-400/10', dotColor: 'bg-red-400' },
 }
 
-/**
- * Get all live pages (useful for sitemap generation).
- */
-export function getLivePages(): RegisteredPage[] {
-  return getPagesByStatus("live");
+// ---- Utility functions ----
+
+export function getPagesByStatus(pages: PageRegistryEntry[], status: PageStatus): PageRegistryEntry[] {
+  return pages.filter(p => p.status === status)
 }
 
-/**
- * Get all unique categories from the registry.
- */
-export function getAllPageCategories(): string[] {
-  return Array.from(new Set(PAGE_REGISTRY.map((p) => p.category)));
+export function getPagesByCategory(pages: PageRegistryEntry[], category: PageCategory): PageRegistryEntry[] {
+  return pages.filter(p => p.category === category)
 }
 
-/**
- * Get blocks from a page sorted by render order.
- */
-export function getPageBlocks(pageId: string): BlockInstance[] {
-  const page = getPageById(pageId);
-  if (!page) return [];
-  return [...page.blocks].sort((a, b) => a.order - b.order);
+export function searchPages(pages: PageRegistryEntry[], query: string): PageRegistryEntry[] {
+  const q = query.toLowerCase()
+  return pages.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.slug.toLowerCase().includes(q) ||
+    p.category.toLowerCase().includes(q) ||
+    p.template.toLowerCase().includes(q) ||
+    (p.notes?.toLowerCase().includes(q) ?? false)
+  )
+}
+
+export function sortPages(
+  pages: PageRegistryEntry[],
+  sortBy: 'name' | 'date' | 'status' | 'category',
+  direction: 'asc' | 'desc' = 'desc'
+): PageRegistryEntry[] {
+  const sorted = [...pages].sort((a, b) => {
+    switch (sortBy) {
+      case 'name':
+        return a.name.localeCompare(b.name)
+      case 'date':
+        return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+      case 'status':
+        return a.status.localeCompare(b.status)
+      case 'category':
+        return a.category.localeCompare(b.category)
+      default:
+        return 0
+    }
+  })
+  return direction === 'desc' ? sorted.reverse() : sorted
+}
+
+export function formatDate(dateStr: string): string {
+  const d = new Date(dateStr)
+  return d.toLocaleDateString('it-IT', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  })
+}
+
+export function formatDateRelative(dateStr: string): string {
+  const d = new Date(dateStr)
+  const now = new Date()
+  const diffMs = now.getTime() - d.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  if (diffDays <= 0) return 'Oggi'
+  if (diffDays === 1) return 'Ieri'
+  if (diffDays < 7) return `${diffDays} giorni fa`
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} settimane fa`
+  return formatDate(dateStr)
 }

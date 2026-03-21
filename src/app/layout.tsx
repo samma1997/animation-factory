@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Instrument_Sans } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,15 +9,16 @@ const inter = Inter({
   display: "swap",
 });
 
-const instrumentSans = Instrument_Sans({
-  variable: "--font-instrument",
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "Animation Factory",
-  description: "Premium animated website builder — create reusable animated blocks and pages.",
+  title: "ABTG Landing Page System",
+  description: "Template system for Alfio Bardolla Training Group landing pages",
 };
 
 export default function RootLayout({
@@ -25,11 +27,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="it"
-      className={`${inter.variable} ${instrumentSans.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="it">
+      <body
+        className={`${inter.variable} ${plusJakarta.variable} antialiased`}
+      >
+        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+      </body>
     </html>
   );
 }
