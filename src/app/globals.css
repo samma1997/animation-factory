@@ -1,26 +1,87 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ═══ BRAND TOKENS — Change these for a new brand ═══ */
+  --color-brand: #3B82F6;
+  --color-brand-light: #60A5FA;
+  --color-brand-dark: #2563EB;
+  --color-accent: #EC4899;
+  --color-accent-dark: #DB2777;
+
+  /* ═══ NEUTRALS ═══ */
+  --color-bg: #ffffff;
+  --color-bg-alt: #F8FAFC;
+  --color-surface: #F1F5F9;
+  --color-surface-dark: #0F172A;
+  --color-text: #0F172A;
+  --color-text-secondary: #64748B;
+  --color-text-muted: #94A3B8;
+  --color-text-inverted: #F8FAFC;
+  --color-border: #E2E8F0;
+
+  /* ═══ SEMANTIC ═══ */
+  --color-success: #10B981;
+  --color-danger: #EF4444;
+  --color-warning: #F59E0B;
+
+  /* ═══ ADMIN DARK THEME ═══ */
+  --color-admin-bg: #0A0A0F;
+  --color-admin-surface: #111118;
+  --color-admin-elevated: #1A1A24;
+  --color-admin-hover: #22222E;
+  --color-admin-border: #2A2A3A;
+  --color-admin-border-strong: #3A3A50;
+  --color-admin-accent: #7C3AED;
+  --color-admin-accent-glow: rgba(124, 58, 237, 0.2);
+  --color-admin-text: #F1F1F8;
+  --color-admin-text-secondary: #9090A8;
+  --color-admin-text-muted: #5A5A70;
+
+  /* ═══ FONTS ═══ */
+  --font-heading: var(--font-instrument);
+  --font-body: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ═══ BASE STYLES ═══ */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), system-ui, -apple-system, sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), var(--font-body), system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* ═══ ADMIN DARK CUSTOM SCROLLBAR ═══ */
+.admin-layout {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-admin-border-strong) var(--color-admin-bg);
+}
+
+.admin-layout *::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.admin-layout *::-webkit-scrollbar-track {
+  background: var(--color-admin-bg);
+}
+
+.admin-layout *::-webkit-scrollbar-thumb {
+  background: var(--color-admin-border-strong);
+  border-radius: 3px;
+}
+
+.admin-layout *::-webkit-scrollbar-thumb:hover {
+  background: var(--color-admin-accent);
 }

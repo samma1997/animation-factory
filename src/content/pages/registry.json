@@ -1,0 +1,104 @@
+[
+  {
+    "id": "homepage-agenzia",
+    "name": "Homepage Agenzia",
+    "slug": "homepage-agenzia",
+    "route": "/",
+    "status": "live",
+    "category": "Landing",
+    "description": "Pagina principale per agenzia digitale con hero, feature e CTA.",
+    "createdAt": "2026-03-10",
+    "updatedAt": "2026-03-20",
+    "blocks": [
+      {
+        "blockId": "hero-center",
+        "order": 1,
+        "props": {
+          "eyebrow": "Agenzia digitale premium",
+          "title": "Trasformiamo idee in esperienze digitali straordinarie",
+          "subtitle": "Dal concept al deploy, realizziamo siti web animati che convertono e lasciano il segno.",
+          "ctaLabel": "Scopri i nostri lavori",
+          "ctaHref": "/portfolio",
+          "secondaryCtaLabel": "Contattaci",
+          "secondaryCtaHref": "/contatti",
+          "backgroundStyle": "gradient",
+          "animated": true
+        }
+      },
+      {
+        "blockId": "pillar-cards",
+        "order": 2,
+        "props": {
+          "eyebrow": "I nostri servizi",
+          "title": "Tutto quello che ti serve",
+          "columns": 3,
+          "animated": true,
+          "cards": [
+            {
+              "icon": "🎨",
+              "title": "Design UI/UX",
+              "description": "Interfacce moderne e intuitive pensate per convertire e fidelizzare."
+            },
+            {
+              "icon": "⚡",
+              "title": "Sviluppo Web",
+              "description": "Next.js, TypeScript, performance ottimizzata e SEO-ready fin dal primo deploy."
+            },
+            {
+              "icon": "📈",
+              "title": "Growth & SEO",
+              "description": "Strategia organica, ottimizzazione Core Web Vitals e contenuto ad alto impatto."
+            }
+          ]
+        }
+      },
+      {
+        "blockId": "checklist-section",
+        "order": 3,
+        "props": {
+          "eyebrow": "Perché noi",
+          "title": "Standard che non scendiamo a compromessi",
+          "columns": 2,
+          "checkColor": "brand",
+          "animated": true,
+          "items": [
+            "Performance Lighthouse 95+",
+            "TypeScript strict su tutto il codebase",
+            "Design system con CSS variables",
+            "Animazioni GSAP fluide e performanti",
+            "Mobile-first responsive",
+            "Consegna nei tempi concordati"
+          ]
+        }
+      },
+      {
+        "blockId": "cta-divider",
+        "order": 4,
+        "props": {
+          "title": "Iniziamo a lavorare insieme?",
+          "subtitle": "Raccontaci il tuo progetto e ti risponderemo entro 24 ore.",
+          "ctaLabel": "Prenota una call gratuita",
+          "ctaHref": "/contatti",
+          "variant": "brand",
+          "animated": true
+        }
+      },
+      {
+        "blockId": "footer-minimal",
+        "order": 5,
+        "props": {
+          "brand": "Agenzia",
+          "tagline": "Esperienze digitali che lasciano il segno.",
+          "links": [
+            { "label": "Home", "href": "/" },
+            { "label": "Servizi", "href": "/servizi" },
+            { "label": "Portfolio", "href": "/portfolio" },
+            { "label": "Contatti", "href": "/contatti" }
+          ],
+          "copyright": "© 2026 Agenzia. Tutti i diritti riservati.",
+          "variant": "light"
+        }
+      }
+    ]
+  }
+]
