@@ -230,7 +230,6 @@ export default function AdminDashboardPage() {
             Design System
           </p>
           <NavItem icon={Layers} label="Blocchi" badge={String(BLOCK_CATALOG.length)} active={activeTab === 'blocchi'} dark={dark} onClick={() => { setActiveTab('blocchi'); setSidebarOpen(false) }} />
-          <NavItem icon={Sparkles} label="Animazioni" badge={String(ANIMATIONS.length)} active={activeTab === 'animazioni'} dark={dark} onClick={() => { setActiveTab('animazioni'); setSidebarOpen(false) }} />
 
           <p className={`mb-2 mt-5 px-3 text-[10px] font-bold uppercase tracking-[0.15em] ${textMuted}`}>
             Strumenti
@@ -313,6 +312,21 @@ export default function AdminDashboardPage() {
 
           {/* ── TAB: BLOCCHI ──────────────────────────────────── */}
           {activeTab === 'blocchi' && (
+            <BlocksTab
+              dark={dark}
+              cardBg={cardBg}
+              textPrimary={textPrimary}
+              textSecondary={textSecondary}
+              textMuted={textMuted}
+              borderColor={borderColor}
+              blockFilter={blockFilter}
+              setBlockFilter={setBlockFilter}
+              filteredBlocks={filteredBlocks}
+            />
+          )}
+
+          {/* blocchi-old-placeholder */}
+          {false && (
             <>
               {/* Category filter pills */}
               <div className="mb-6 flex flex-wrap gap-2">
@@ -345,18 +359,6 @@ export default function AdminDashboardPage() {
                 ))}
               </div>
             </>
-          )}
-
-          {/* ── TAB: ANIMAZIONI ───────────────────────────────── */}
-          {activeTab === 'animazioni' && (
-            <AnimationsTab
-              dark={dark}
-              cardBg={cardBg}
-              textPrimary={textPrimary}
-              textSecondary={textSecondary}
-              textMuted={textMuted}
-              borderColor={borderColor}
-            />
           )}
 
           {/* ── TAB: IMMAGINI ──────────────────────────────────── */}
@@ -815,22 +817,18 @@ function BlockMiniPreview({ blockId, dark }: { blockId: string; dark: boolean })
 
 // ── Animation Demo Card ──────────────────────────────────
 
-// ── Animations Tab with Export/Import ─────────────────────
+// ── Blocks Tab with Export/Import ─────────────────────
 
-function AnimationsTab({ dark, cardBg, textPrimary, textSecondary, textMuted, borderColor }: {
+function BlocksTab({ dark, cardBg, textPrimary, textSecondary, textMuted, borderColor, blockFilter, setBlockFilter, filteredBlocks }: {
   dark: boolean; cardBg: string; textPrimary: string; textSecondary: string; textMuted: string; borderColor: string
+  blockFilter: BlockCategory | 'all'; setBlockFilter: (f: BlockCategory | 'all') => void; filteredBlocks: typeof BLOCK_CATALOG
 }) {
-  const [animFilter, setAnimFilter] = useState<AnimCategory | 'all'>('all')
-  const [selectedAnims, setSelectedAnims] = useState<Set<string>>(new Set())
+  const [selectedBlocks, setSelectedBlocks] = useState<Set<string>>(new Set())
   const [importStatus, setImportStatus] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const filteredAnims = animFilter === 'all'
-    ? ANIMATIONS
-    : ANIMATIONS.filter(a => a.category === animFilter)
-
   const toggleSelect = (id: string) => {
-    setSelectedAnims(prev => {
+    setSelectedBlocks(prev => {
       const next = new Set(prev)
       if (next.has(id)) next.delete(id)
       else next.add(id)
@@ -839,30 +837,39 @@ function AnimationsTab({ dark, cardBg, textPrimary, textSecondary, textMuted, bo
   }
 
   const selectAll = () => {
-    if (selectedAnims.size === filteredAnims.length) {
-      setSelectedAnims(new Set())
+    if (selectedBlocks.size === filteredBlocks.length) {
+      setSelectedBlocks(new Set())
     } else {
-      setSelectedAnims(new Set(filteredAnims.map(a => a.id)))
+      setSelectedBlocks(new Set(filteredBlocks.map(b => b.id)))
     }
   }
 
   const exportSelected = () => {
-    const toExport = ANIMATIONS.filter(a => selectedAnims.has(a.id))
+    const toExport = BLOCK_CATALOG.filter(b => selectedBlocks.has(b.id))
     const exportData = {
       version: '1.0.0',
       platform: 'SAMMA Factory',
       exportedAt: new Date().toISOString(),
-      animations: toExport.map(a => ({
-        ...a,
-        // Include the GSAP function source as a portable reference
-        _portable: true,
+      blocks: toExport.map(b => ({
+        id: b.id,
+        name: b.name,
+        category: b.category,
+        description: b.description,
+        props: BLOCK_PROPS_MAP[b.id] ?? [],
         _brandAgnostic: true,
-        _note: 'This animation uses CSS variables for colors. Import into any SAMMA Factory project and it will adapt to the target brand automatically.',
+        _note: 'Questo blocco usa CSS variables per colori e font. Importalo in qualsiasi progetto SAMMA Factory e si adattera automaticamente al brand.',
+      })),
+      animations: ANIMATIONS.map(a => ({
+        id: a.id,
+        name: a.name,
+        category: a.category,
+        description: a.description,
+        signature: a.signature,
       })),
       instructions: {
-        import: 'Go to Admin > Animazioni > Import and upload this file.',
-        manual: 'Copy the animation functions from lib/animations.ts to your target project.',
-        brandAdaptation: 'Animations use gsap.from/to on transform+opacity properties. Colors come from CSS variables in the blocks, so they adapt automatically to any brand.',
+        import: 'Admin > Blocchi > Importa e carica questo file.',
+        manual: 'Copia i componenti da components/blocks-library/ e le animazioni da lib/animations.ts nel progetto target.',
+        brandAdaptation: 'I blocchi usano CSS variables (--color-brand, ecc.). Le animazioni usano transform/opacity. Tutto si adatta al brand automaticamente.',
       },
     }
 
@@ -870,7 +877,7 @@ function AnimationsTab({ dark, cardBg, textPrimary, textSecondary, textMuted, bo
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `samma-animations-${toExport.length}-${Date.now()}.json`
+    a.download = `samma-blocks-${toExport.length}-${Date.now()}.json`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -883,10 +890,11 @@ function AnimationsTab({ dark, cardBg, textPrimary, textSecondary, textMuted, bo
     reader.onload = (ev) => {
       try {
         const data = JSON.parse(ev.target?.result as string)
-        if (data.animations && Array.isArray(data.animations)) {
-          const count = data.animations.length
-          const names = data.animations.map((a: AnimEntry) => a.name).join(', ')
-          setImportStatus(`Importate ${count} animazioni: ${names}. Per attivarle, copia le funzioni corrispondenti in lib/animations.ts del progetto target.`)
+        if (data.blocks && Array.isArray(data.blocks)) {
+          const count = data.blocks.length
+          const animCount = data.animations?.length ?? 0
+          const names = data.blocks.map((b: { name: string }) => b.name).join(', ')
+          setImportStatus(`Importati ${count} blocchi (${names}) con ${animCount} animazioni. Copia i file componente nel progetto target per attivarli.`)
         } else {
           setImportStatus('Formato file non valido. Usa un file esportato da SAMMA Factory.')
         }
@@ -904,9 +912,9 @@ function AnimationsTab({ dark, cardBg, textPrimary, textSecondary, textMuted, bo
       <div className={`mb-6 rounded-xl border p-4 ${dark ? 'border-violet-500/20 bg-violet-500/5' : 'border-violet-200 bg-violet-50'}`}>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className={`text-sm font-bold ${textPrimary}`}>Esporta / Importa Animazioni</h3>
+            <h3 className={`text-sm font-bold ${textPrimary}`}>Esporta / Importa Blocchi</h3>
             <p className={`mt-0.5 text-xs ${textSecondary}`}>
-              Trasferisci animazioni tra SAMMA Factory e altri progetti. Le animazioni si adattano automaticamente ai colori del brand target.
+              Trasferisci blocchi (con animazioni incluse) tra progetti. Si adattano automaticamente ai colori del brand.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -922,15 +930,15 @@ function AnimationsTab({ dark, cardBg, textPrimary, textSecondary, textMuted, bo
             <input ref={fileInputRef} type="file" accept=".json" onChange={handleImport} className="hidden" />
             <button
               onClick={exportSelected}
-              disabled={selectedAnims.size === 0}
+              disabled={selectedBlocks.size === 0}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-colors ${
-                selectedAnims.size > 0
+                selectedBlocks.size > 0
                   ? 'bg-violet-600 text-white hover:bg-violet-700'
                   : dark ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-gray-100 text-gray-300 cursor-not-allowed'
               }`}
             >
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-              Esporta {selectedAnims.size > 0 ? `(${selectedAnims.size})` : ''}
+              Esporta {selectedBlocks.size > 0 ? `(${selectedBlocks.size})` : ''}
             </button>
           </div>
         </div>
@@ -944,41 +952,47 @@ function AnimationsTab({ dark, cardBg, textPrimary, textSecondary, textMuted, bo
       </div>
 
       {/* Category filter + select all */}
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        <FilterPill label="Tutte" active={animFilter === 'all'} onClick={() => setAnimFilter('all')} dark={dark} />
-        {(Object.keys(ANIM_CATEGORIES) as AnimCategory[]).map(cat => (
-          <FilterPill key={cat} label={ANIM_CATEGORIES[cat].label} active={animFilter === cat} onClick={() => setAnimFilter(cat)} dark={dark} />
+      <div className="mb-6 flex flex-wrap items-center gap-2">
+        <FilterPill label="Tutti" active={blockFilter === 'all'} onClick={() => setBlockFilter('all')} dark={dark} />
+        {(Object.keys(CATEGORY_DISPLAY) as BlockCategory[]).map(cat => (
+          <FilterPill
+            key={cat}
+            label={CATEGORY_DISPLAY[cat].label}
+            active={blockFilter === cat}
+            onClick={() => setBlockFilter(cat)}
+            dark={dark}
+          />
         ))}
         <div className="flex-1" />
         <button
           onClick={selectAll}
           className={`text-[11px] font-medium ${dark ? 'text-white/40 hover:text-white/60' : 'text-gray-400 hover:text-gray-600'}`}
         >
-          {selectedAnims.size === filteredAnims.length ? 'Deseleziona tutto' : 'Seleziona tutto'}
+          {selectedBlocks.size === filteredBlocks.length ? 'Deseleziona' : 'Seleziona tutto'}
         </button>
       </div>
 
-      {/* Animation cards */}
-      <div className="space-y-4">
-        {filteredAnims.map(anim => (
-          <div key={anim.id} className="relative">
-            {/* Selection checkbox */}
+      {/* Block cards grid */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {filteredBlocks.map(block => (
+          <div key={block.id} className="relative">
             <div className="absolute left-3 top-3 z-10">
               <button
-                onClick={() => toggleSelect(anim.id)}
+                onClick={() => toggleSelect(block.id)}
                 className={`flex h-5 w-5 items-center justify-center rounded border transition-colors ${
-                  selectedAnims.has(anim.id)
+                  selectedBlocks.has(block.id)
                     ? 'border-violet-500 bg-violet-600 text-white'
                     : dark ? 'border-white/20 bg-white/5 hover:border-violet-400' : 'border-gray-300 bg-white hover:border-violet-400'
                 }`}
               >
-                {selectedAnims.has(anim.id) && (
+                {selectedBlocks.has(block.id) && (
                   <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                 )}
               </button>
             </div>
-            <AnimationCard
-              anim={anim}
+            <BlockCard
+              block={block}
+              props={BLOCK_PROPS_MAP[block.id] ?? []}
               dark={dark}
               cardBg={cardBg}
               textPrimary={textPrimary}
