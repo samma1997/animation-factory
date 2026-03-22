@@ -365,7 +365,7 @@ export default function AdminDashboardPage() {
           {activeTab === 'immagini' && (
             <>
               {/* How-to banner */}
-              <div className={`mb-6 rounded-xl border p-5 ${dark ? 'border-[#EF7B11]/20 bg-[#EF7B11]/5' : 'border-orange-200 bg-orange-50'}`}>
+              <div className={`mb-6 rounded-xl border p-5 ${dark ? 'border-[#7C3AED]/20 bg-[#7C3AED]/5' : 'border-orange-200 bg-orange-50'}`}>
                 <h3 className={`text-sm font-bold ${textPrimary}`}>Come caricare le immagini</h3>
                 <ol className={`mt-2 space-y-1 text-xs ${textSecondary}`}>
                   <li>1. Clicca su <strong>&ldquo;Carica su GitHub&rdquo;</strong> nella categoria desiderata</li>
@@ -431,7 +431,7 @@ export default function AdminDashboardPage() {
                     onClick={() => setPreviewMode('desktop')}
                     className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                       previewMode === 'desktop'
-                        ? 'bg-[#EF7B11] text-white'
+                        ? 'bg-[#7C3AED] text-white'
                         : dark ? 'text-white/50 hover:text-white/70' : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -442,7 +442,7 @@ export default function AdminDashboardPage() {
                     onClick={() => setPreviewMode('mobile')}
                     className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                       previewMode === 'mobile'
-                        ? 'bg-[#EF7B11] text-white'
+                        ? 'bg-[#7C3AED] text-white'
                         : dark ? 'text-white/50 hover:text-white/70' : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -541,7 +541,7 @@ function FilterPill({ label, active, onClick, dark }: { label: string; active: b
       onClick={onClick}
       className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
         active
-          ? 'bg-[#EF7B11] text-white'
+          ? 'bg-[#7C3AED] text-white'
           : dark ? 'bg-white/[0.06] text-white/50 hover:bg-white/10 hover:text-white/70' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
       }`}
     >
@@ -580,7 +580,7 @@ function BlockCard({ block, props, dark, cardBg, textPrimary, textSecondary, tex
           <button
             onClick={() => setShowProps(!showProps)}
             className={`flex items-center gap-1 text-[11px] font-semibold transition-colors ${
-              dark ? 'text-[#EF7B11]/80 hover:text-[#EF7B11]' : 'text-[#EF7B11] hover:text-[#d96a0e]'
+              dark ? 'text-[#7C3AED]/80 hover:text-[#7C3AED]' : 'text-[#7C3AED] hover:text-[#6D28D9]'
             }`}
           >
             <ChevronRight className={`h-3 w-3 transition-transform ${showProps ? 'rotate-90' : ''}`} />
@@ -623,7 +623,7 @@ function BlockCard({ block, props, dark, cardBg, textPrimary, textSecondary, tex
 
 function BlockMiniPreview({ blockId, dark }: { blockId: string; dark: boolean }) {
   const base = dark ? 'text-white/20' : 'text-gray-300'
-  const accent = '#EF7B11'
+  const accent = '#7C3AED'
 
   const previews: Record<string, React.ReactNode> = {
     'hero-split': (
@@ -1039,7 +1039,7 @@ function AnimationCard({ anim, dark, cardBg, textPrimary, textSecondary, textMut
     el.style.width = '80px'
     el.style.height = '80px'
     el.style.borderRadius = '12px'
-    el.style.background = '#EF7B11'
+    el.style.background = '#7C3AED'
     el.style.display = 'flex'
     el.style.alignItems = 'center'
     el.style.justifyContent = 'center'
@@ -1090,7 +1090,7 @@ function AnimationCard({ anim, dark, cardBg, textPrimary, textSecondary, textMut
         for (let i = 0; i < 4; i++) {
           const child = document.createElement('div')
           child.className = 'stagger-child'
-          child.style.cssText = `width:50px;height:50px;border-radius:10px;background:#EF7B11;opacity:0;`
+          child.style.cssText = `width:50px;height:50px;border-radius:10px;background:#7C3AED;opacity:0;`
           el.appendChild(child)
         }
         gsap.set(el.querySelectorAll('.stagger-child'), { opacity: 0, y: 20 })
@@ -1189,7 +1189,7 @@ function AnimationCard({ anim, dark, cardBg, textPrimary, textSecondary, textMut
         const items = ['SAMMA', 'Landing', 'Factory', 'Design']
         items.forEach(t => {
           const span = document.createElement('span')
-          span.style.cssText = `padding:4px 12px;background:#EF7B11;color:white;border-radius:4px;font-size:11px;font-weight:700;`
+          span.style.cssText = `padding:4px 12px;background:#7C3AED;color:white;border-radius:4px;font-size:11px;font-weight:700;`
           span.textContent = t
           track.appendChild(span)
         })
@@ -1256,7 +1256,7 @@ function AnimationCard({ anim, dark, cardBg, textPrimary, textSecondary, textMut
           <button
             onClick={() => setShowCode(!showCode)}
             className={`mt-2 flex items-center gap-1 text-[11px] font-semibold transition-colors ${
-              dark ? 'text-[#EF7B11]/80 hover:text-[#EF7B11]' : 'text-[#EF7B11] hover:text-[#d96a0e]'
+              dark ? 'text-[#7C3AED]/80 hover:text-[#7C3AED]' : 'text-[#7C3AED] hover:text-[#6D28D9]'
             }`}
           >
             <Code2 className="h-3 w-3" />
@@ -1280,7 +1280,7 @@ function AnimationCard({ anim, dark, cardBg, textPrimary, textSecondary, textMut
           <div className="flex items-center gap-2">
             <button
               onClick={playAnimation}
-              className="flex items-center gap-1.5 rounded-lg bg-[#EF7B11] px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#d96a0e]"
+              className="flex items-center gap-1.5 rounded-lg bg-[#7C3AED] px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#6D28D9]"
             >
               <Play className="h-3.5 w-3.5" />
               Play
