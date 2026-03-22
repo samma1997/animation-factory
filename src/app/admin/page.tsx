@@ -148,15 +148,15 @@ export default function AdminDashboardPage() {
   const [previewPage, setPreviewPage] = useState<string>(pages[0]?.route ?? '')
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop')
 
-  // Theme classes
-  const bg = dark ? 'bg-[#0d0f14]' : 'bg-gray-50'
-  const sidebarBg = dark ? 'bg-[#0a0c10] border-white/5' : 'bg-white border-gray-200'
-  const cardBg = dark ? 'bg-[#12141a] border-white/[0.06]' : 'bg-white border-gray-200'
-  const textPrimary = dark ? 'text-white' : 'text-gray-900'
-  const textSecondary = dark ? 'text-white/40' : 'text-gray-500'
-  const textMuted = dark ? 'text-white/30' : 'text-gray-400'
-  const hoverRow = dark ? 'hover:bg-white/[0.02]' : 'hover:bg-gray-50'
-  const borderColor = dark ? 'border-white/[0.06]' : 'border-gray-100'
+  // Theme classes — tuned for readability and design
+  const bg = dark ? 'bg-[#0c0e14]' : 'bg-[#F4F6F8]'
+  const sidebarBg = dark ? 'bg-[#0a0c12] border-white/[0.08]' : 'bg-white border-gray-200'
+  const cardBg = dark ? 'bg-[#13151d] border-white/[0.08]' : 'bg-white border-gray-200 shadow-sm'
+  const textPrimary = dark ? 'text-[#F0F0F8]' : 'text-gray-900'
+  const textSecondary = dark ? 'text-[#8A8AA0]' : 'text-gray-500'
+  const textMuted = dark ? 'text-[#5A5A70]' : 'text-gray-400'
+  const hoverRow = dark ? 'hover:bg-white/[0.04]' : 'hover:bg-gray-50'
+  const borderColor = dark ? 'border-white/[0.08]' : 'border-gray-200'
 
   const tabTitles: Record<TabId, string> = {
     dashboard: 'SAMMA Factory',
@@ -196,19 +196,19 @@ export default function AdminDashboardPage() {
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:translate-x-0`}
       >
-        {/* Logo */}
+        {/* Logo — click goes to Dashboard */}
         <div className={`flex items-center justify-between border-b px-5 py-5 ${borderColor}`}>
-          <div className="flex items-center gap-3">
+          <button onClick={() => { setActiveTab('dashboard'); setSidebarOpen(false) }} className="flex items-center gap-3 transition-opacity hover:opacity-80">
             <div className="flex h-9 w-9 items-center justify-center rounded-[6px] bg-[#0F172A] p-1.5">
               <svg viewBox="0 0 256 234" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
                 <path d="M163.581 65.6817C163.581 67.71 164.747 69.5575 166.579 70.4297L193.445 83.2268C194.897 83.9181 196.585 83.9076 198.027 83.1982L223.962 70.4468C225.761 69.5623 226.9 67.732 226.9 65.7273V5.2591C226.9 2.35458 229.255 0 232.159 0H250.741C253.645 0 256 2.35458 256 5.2591V228.712C256 231.616 253.645 233.971 250.741 233.971H98.1976C95.293 233.971 92.9385 231.616 92.9385 228.712V168.117C92.9385 166.113 91.7988 164.282 89.9998 163.398L64.3231 150.773C62.8804 150.064 61.1926 150.054 59.7412 150.745L33.1393 163.415C31.308 164.287 30.1416 166.135 30.1416 168.163V228.712C30.1416 231.616 27.787 233.971 24.8825 233.971H5.2591C2.35458 233.971 0 231.616 0 228.712V5.25909C0 2.35457 2.35458 0 5.2591 0H158.322C161.226 0 163.581 2.35458 163.581 5.2591V65.6817ZM29.3672 92.042C29.3672 93.9908 30.4449 95.7799 32.1677 96.691L158.239 163.363C159.961 164.274 161.039 166.063 161.039 168.012V199.466C161.039 202.37 163.394 204.725 166.298 204.725H221.616C224.52 204.725 226.875 202.37 226.875 199.466V141.679C226.875 139.729 225.796 137.939 224.071 137.029L98.2599 70.6091C96.5352 69.6986 95.4561 67.9086 95.4561 65.9583V34.6331C95.4561 31.7286 93.1015 29.374 90.197 29.374H34.6263C31.7218 29.374 29.3672 31.7286 29.3672 34.6331V92.042Z" fill="white"/>
               </svg>
             </div>
-            <div>
+            <div className="text-left">
               <p className={`text-sm font-bold ${textPrimary}`}>SAMMA Factory</p>
               <p className={`text-[11px] ${textMuted}`}>Dashboard</p>
             </div>
-          </div>
+          </button>
           <button
             onClick={() => setSidebarOpen(false)}
             className={`lg:hidden ${textSecondary}`}
@@ -262,19 +262,19 @@ export default function AdminDashboardPage() {
       <main className="flex-1 lg:ml-[260px]">
         {/* Mobile header */}
         <div className={`sticky top-0 z-30 flex items-center justify-between border-b px-4 py-3 lg:hidden ${
-          dark ? 'bg-[#0d0f14] border-white/5' : 'bg-white border-gray-200'
+          dark ? 'bg-[#0c0e14] border-white/[0.08]' : 'bg-white border-gray-200'
         }`}>
           <button onClick={() => setSidebarOpen(true)} className={textPrimary}>
             <Menu className="h-6 w-6" />
           </button>
-          <div className="flex items-center gap-2">
+          <button onClick={() => { setActiveTab('dashboard'); setSidebarOpen(false) }} className="flex items-center gap-2 transition-opacity hover:opacity-80">
             <div className="flex h-7 w-7 items-center justify-center rounded-[4px] bg-[#0F172A] p-1">
               <svg viewBox="0 0 256 234" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
                 <path d="M163.581 65.6817C163.581 67.71 164.747 69.5575 166.579 70.4297L193.445 83.2268C194.897 83.9181 196.585 83.9076 198.027 83.1982L223.962 70.4468C225.761 69.5623 226.9 67.732 226.9 65.7273V5.2591C226.9 2.35458 229.255 0 232.159 0H250.741C253.645 0 256 2.35458 256 5.2591V228.712C256 231.616 253.645 233.971 250.741 233.971H98.1976C95.293 233.971 92.9385 231.616 92.9385 228.712V168.117C92.9385 166.113 91.7988 164.282 89.9998 163.398L64.3231 150.773C62.8804 150.064 61.1926 150.054 59.7412 150.745L33.1393 163.415C31.308 164.287 30.1416 166.135 30.1416 168.163V228.712C30.1416 231.616 27.787 233.971 24.8825 233.971H5.2591C2.35458 233.971 0 231.616 0 228.712V5.25909C0 2.35457 2.35458 0 5.2591 0H158.322C161.226 0 163.581 2.35458 163.581 5.2591V65.6817ZM29.3672 92.042C29.3672 93.9908 30.4449 95.7799 32.1677 96.691L158.239 163.363C159.961 164.274 161.039 166.063 161.039 168.012V199.466C161.039 202.37 163.394 204.725 166.298 204.725H221.616C224.52 204.725 226.875 202.37 226.875 199.466V141.679C226.875 139.729 225.796 137.939 224.071 137.029L98.2599 70.6091C96.5352 69.6986 95.4561 67.9086 95.4561 65.9583V34.6331C95.4561 31.7286 93.1015 29.374 90.197 29.374H34.6263C31.7218 29.374 29.3672 31.7286 29.3672 34.6331V92.042Z" fill="white"/>
               </svg>
             </div>
             <span className={`text-sm font-bold ${textPrimary}`}>SAMMA Factory</span>
-          </div>
+          </button>
           <button onClick={() => setDark(!dark)} className={textSecondary}>
             {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
